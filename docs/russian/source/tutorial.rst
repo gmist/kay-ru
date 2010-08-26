@@ -53,33 +53,36 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
 Если вы устанавливали App Engine SDK с помощью инсталятора,
 то создавать символьную ссылку не нужно.
 
-Quick start
+Быстрый страрт
 -----------
 
-Starting a new project
+Создание нового проекта
 ======================
 
-To start a new project, you can use ``manage.py`` script offered by
-Kay for creating a skelton of your project. After that, you're
-supposed to use a newly created ``manage.py`` script in the project
-directory for managing this project(including deployment, testing,
-i18n translation work, etc, etc..).
+Для создания нового проекта, вы можете использовать скрипт ``manage.py``,
+который используется в Kay для создания скелета вашего проекта.
+Кроме создания нового проекта, вы можете использовать этот скрипт
+для управления этим проектом (включая развертывание, тестирование,
+создание i18n переводов и т.д и т.п.).
+
 
 .. code-block:: bash
 
    $ python kay/manage.py startproject myproject
    $ tree myproject
    myproject
-   |-- app.yaml
-   |-- kay -> /Users/tmatsuo/work/tmp/kay/kay
-   |-- manage.py -> /Users/tmatsuo/work/tmp/kay/manage.py
-   |-- settings.py
+   !-- app.yaml
+   !-- kay -> /Users/tmatsuo/work/tmp/kay/kay
+   !-- manage.py -> /Users/tmatsuo/work/tmp/kay/manage.py
+   !-- settings.py
    `-- urls.py
 
    1 directory, 4 files
 
-On platforms that supports symbolic link, two symbolic link for a
-directory ``kay`` and a file ``manage.py`` are created.
+.. Note::
+На платформах, которые поддерживают символьные ссылки, директория
+``kay`` и файл ``manage.py`` будут созданы в виде этих ссылок.
+
 
 Creating an application
 =======================
