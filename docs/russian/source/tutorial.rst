@@ -138,11 +138,12 @@ settings.py
 В приведенном выше примере, как вы видите, мы добавили еще одно приложение
 с именем ``kay.auth``, которое мы будем использовать в дальнейшем.
 
-Running your application
+
+Запуск вашего приложения
 ========================
 
-Let's run your first application. You can run the development server
-by following command.
+Давайте запустим ваше первое приложение. Вы можете запустить сервер
+разработки следующей командой.
 
 .. code-block:: bash
 
@@ -152,8 +153,7 @@ by following command.
   ...
   INFO     ... Running application myproject on port 8080: http://localhost:8080
 
-
-You will see just 'Hello' on your browser by accessing
+Вы увидите просто 'Hello' в вашем браузере, если зайдете по адресу
 http://localhost:8080/.
 
 
