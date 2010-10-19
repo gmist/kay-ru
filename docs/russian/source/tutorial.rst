@@ -157,20 +157,22 @@ settings.py
 http://localhost:8080/.
 
 
-Deployment
+Развертывание
 ==========
 
-Before looking into the code, let's deploy this project to
-appspot. First, you need to edit ``app.yaml`` and set your ``appid``
-as ``application``. After that, please do as follows.
+Перед тем как погрузится в код, давайте развернем проект на appspot.
+Сначала вы должны отредактировать ``app.yaml`` и указать идентификатор
+вашего приложения (``appid``) в переменной ``application``. После этого
+выполните следующую команду.
 
 .. code-block:: bash
 
   $ python manage.py appcfg update
 
-In case you're asked for a username and password, please type in your
-credentials here. After successful deployment, you can access your
-application at http://your-appid.appspot.com/.
+В процессе развертывания у вас будет запрошены имя пользователя и пароль,
+пожалуйста введите их, чтобы подтвердить ваши полномочия. После окончания
+развертывания вы можете получить доступ к приложению по
+адресу http://your-appid.appspot.com/.
 
 
 Quick look into a skelton
