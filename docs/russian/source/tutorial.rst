@@ -84,14 +84,13 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
 ``kay`` и файл ``manage.py`` будут созданы в виде этих ссылок.
 
 
-Creating an application
+Создание приложения
 =======================
+Используя Kay необходимо создать по крайне мере одно приложение в вашем проекте.
 
-With kay, you need to create at least one application in your project.
-
-Change directory into the newly created ``myproject`` directory, and
-create your first application. In an example bellow, an application
-named ``myapp`` is created.
+Перейдите в только что созданную директорию проекта ``myproject`` и
+создайте ваше первое приложение. В приведенном ниже примере, создаваемое приложение
+называется ``myapp``.
 
 .. code-block:: bash
 
@@ -99,22 +98,22 @@ named ``myapp`` is created.
    $ python manage.py startapp myapp
    $ tree myapp
    myapp
-   |-- __init__.py
-   |-- models.py
-   |-- templates
-   |   `-- index.html
-   |-- urls.py
+   !-- __init__.py
+   !-- models.py
+   !-- templates
+   !   `-- index.html
+   !-- urls.py
    `-- views.py
 
    1 directory, 5 files
 
-After creating an application, you need to edit ``settings.py`` for
-registering your application to the project.
+После создания приложения, вам необходимо отредактировать файл ``settings.py``
+для того, чтобы зарегистрировать созданное приложение в проекте.
 
-First, please add ``myapp`` to a tuple ``settings.INSTALLED_APPS``. If
-necessary, you can configure which URL to mount this application by
-setting a dictionary ``APP_MOUNT_POINTS``. An example bellow shows how
-to mount your application at a URL '/'.
+Для начала добавьте ``myapp`` в кортеж ``settings.INSTALLED_APPS``. При
+необходимости вы можете изменить URL для этого приложения изменив словарь
+``APP_MOUNT_POINTS``. В приведенном ниже примере показано, как привязать
+ваше приложение к URL '/'.
 
 settings.py
 
@@ -133,11 +132,11 @@ settings.py
     'myapp': '/',
   }
 
-Unless setting ``APP_MOUNT_POINTS``, the application will be mounted
-at a URL come from the application name like ``/myapp``.
+Если не изменять настройку ``APP_MOUNT_POINTS``, то приложение будет
+привязано к URL, который будет выглядеть как название приложения ``/myapp``.
 
-In the example above, as you see, we added another application named
-``kay.auth`` for later use.
+В приведенном выше примере, как вы видите, мы добавили еще одно приложение
+с именем ``kay.auth``, которое мы будем использовать в дальнейшем.
 
 Running your application
 ========================
