@@ -12,7 +12,7 @@
   * Kay Framework
   * ipython (рекомендуется)
 
-Если вы инсталируете python25 из pacports, вы также должны установить::
+Если вы инсталируете python25 из macports, вы также должны установить::
 
   * py25-hashlib
   * py25-socket-ssl
