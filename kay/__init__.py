@@ -28,6 +28,8 @@ def setup_env(manage_py_env=False):
   # Try to import the appengine code from the system path.
   try:
     from google.appengine.api import apiproxy_stub_map
+    # and google 3dr party libs
+    import yaml, fancy_urllib
   except ImportError, e:
     # Not on the system path. Build a list of alternative paths where it
     # may be. First look within the project for a local copy, then look for
