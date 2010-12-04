@@ -134,6 +134,7 @@ def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
     args.append("--kind=%s" % kind)
     args.append("--db_filename=%s" % db_filename)
     args.append("--log_file=%s" % log_file)
+    args.append("--batch_size=%s" % 20) 
     if op == DUMP:
       args.append("--result_db_filename=%s" % result_db_filename)
     args.append("--url=%s" % url)
