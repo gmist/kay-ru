@@ -404,11 +404,12 @@ class KayApp(object):
       message = "%s\n\n%s" % (self._get_traceback(exc_info), request_repr)
       logging.error(message)
       if self.app_settings.DEBUG:
-        return InternalServerError(message.replace("\n", "<br/>\n"))
+        error = InternalServerError(message.replace("\n", "<br/>\n"))
+        return error.get_response(request.environ)
       else:
         mail.mail_admins(subject, message, fail_silently=True)
         # TODO: Return an HttpResponse that displays a friendly error message.
-        return InternalServerError()
+        return InternalServerError().get_response(request.environ)
 
   def _get_traceback(self, exc_info):
     "Helper function to return the traceback as a string"

@@ -4,6 +4,7 @@
 from werkzeug import (
   BaseResponse, Client, Request
 )
+from google.appengine.ext.appstats import recording
 
 from kay.app import get_application
 from kay.conf import LazySettings
@@ -16,6 +17,8 @@ class AppStatsMiddlewareTestCase(GAETestBase):
   CLEANUP_USED_KIND = True
 
   def setUp(self):
+    from google.appengine.api import memcache
+    memcache.flush_all()
     s = LazySettings(settings_module='kay.tests.appstats_settings')
     app = get_application(settings=s)
     self.client = Client(app, BaseResponse)
@@ -24,7 +27,6 @@ class AppStatsMiddlewareTestCase(GAETestBase):
     pass
 
   def test_appstats_middleware(self):
-    from google.appengine.api import apiproxy_stub_map
 
     request = Request({})
     middleware = AppStatsMiddleware()
@@ -35,11 +37,11 @@ class AppStatsMiddlewareTestCase(GAETestBase):
     r = middleware.process_response(request, BaseResponse("", 200))
     self.assertTrue(isinstance(r, BaseResponse))
 
-    memcache = apiproxy_stub_map.apiproxy._APIProxyStubMap__stub_map['memcache']._the_cache
-    self.assertTrue('__appstats__' in memcache)
+    summary = recording.load_summary_protos()
+    self.assert_(summary)
 
   def test_appstats_middleware_request(self):
-    from google.appengine.api import apiproxy_stub_map
+
     response = self.client.get('/no_decorator')
-    memcache = apiproxy_stub_map.apiproxy._APIProxyStubMap__stub_map['memcache']._the_cache
-    self.assertTrue('__appstats__' in memcache)
+    summary = recording.load_summary_protos()
+    self.assert_(summary)

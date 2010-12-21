@@ -76,6 +76,17 @@ class DatastoreBackendTestCase(GAETestBase):
     response = self.client.get(url_for('auth_testapp/secret'))
     self.assertEqual(response.status_code, 302)
 
+  def test_create_inactive_user(self):
+      from kay.auth.models import DatastoreUser
+      from kay.utils import crypto
+
+      user = DatastoreUser.create_inactive_user("testuser", "password", "testuser@example.com") 
+      self.assertEqual(user.key().name(), DatastoreUser.get_key_name("testuser"))
+      self.assertEqual(user.user_name, "testuser")
+    
+      self.assertTrue(crypto.check_pwhash(user.password, "password"))
+      self.assertEqual(user.email, "testuser@example.com")
+
 class GAEMABackendTestCase(GAETestBase):
   KIND_NAME_UNSWAPPED = False
   USE_PRODUCTION_STUBS = True

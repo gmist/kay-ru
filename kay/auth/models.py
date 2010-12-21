@@ -57,7 +57,7 @@ class DatastoreUserDBOperationMixin(object):
   def create_inactive_user(cls, user_name, password, email, send_email=True):
     import datetime
     from kay.registration.models import RegistrationProfile
-    from google.appengine.api.labs import taskqueue
+    from google.appengine.api import taskqueue
     def txn():
       key_name = cls.get_key_name(user_name)
       user = cls.get_by_key_name(key_name)
@@ -196,7 +196,7 @@ class TemporarySession(db.Model):
                       countdown=settings.TEMPORARY_SESSION_LIFETIME,
                       additional_tq_url=None, tq_kwargs={}):
     from kay.utils import crypto
-    from google.appengine.api.labs import taskqueue
+    from google.appengine.api import taskqueue
     def txn(id):
       key_name = cls.get_key_name(id)
       if additional_tq_url is not None:

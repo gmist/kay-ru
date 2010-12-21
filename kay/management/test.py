@@ -38,7 +38,7 @@ from google.appengine.api import mail_stub
 from google.appengine.api import urlfetch_stub
 from google.appengine.api.memcache import memcache_stub
 from google.appengine.api import user_service_stub
-from google.appengine.api.labs.taskqueue import taskqueue_stub
+from google.appengine.api.taskqueue import taskqueue_stub
 try:
   from google.appengine.api.images import images_stub
 except ImportError:

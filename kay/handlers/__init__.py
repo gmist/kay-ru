@@ -38,7 +38,7 @@ class BaseHandler(object):
       else:
         return NotImplemented()
     else:
-      return MethodNotAllowed()
+      raise MethodNotAllowed()
 
   def handle_exception(self, exception):
     pass

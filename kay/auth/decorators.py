@@ -24,7 +24,7 @@ def login_required(func):
   def inner(request, *args, **kwargs):
     if request.user.is_anonymous():
       if request.is_xhr:
-        return Forbidden()
+        raise Forbidden
       else:
         return redirect(create_login_url(request.url))
     return func(request, *args, **kwargs)

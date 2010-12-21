@@ -127,7 +127,7 @@ def reset_password(request, session_key):
       # BadKeyError ... etc
       temporary_session = None
     if temporary_session is None:
-      return Forbidden("Temporary Session might be expired.")
+      raise Forbidden("Temporary Session might be expired.")
     # TODO: acquire new temporary session
     new_session = TemporarySession.get_new_session(temporary_session.user)
     temporary_session.delete()

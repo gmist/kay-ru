@@ -903,7 +903,7 @@ class RESTViewGroup(ViewGroup):
             self.check_authority(request, OP_SHOW, obj=model,
                                  model_name=model_name, prop_name=None)
             if model is None:
-                return NotFound()
+                raise NotFound
             return self.out_to_response(
                 self.models_to_xml(request, model_name, model_handler, model,
                                    {}))
