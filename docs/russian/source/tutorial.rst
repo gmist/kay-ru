@@ -176,14 +176,15 @@ http://localhost:8080/.
 адресу http://your-appid.appspot.com/.
 
 
-Quick look into a skelton
--------------------------
+
+Быстрый обзор сгенерированного каркаса приложения
+-------------------------------------------------
 
 myapp/urls.py
 =============
 
-First, here is a default ``urls.py``. You can configure a mapping
-between URLs and your views here.
+Первым делом рассмотрим сгенерированный ``urls.py``. В нем вы можете 
+конфигурировать отображение между URLs и представлениями.
 
 myapp/urls.py:
 
@@ -199,13 +200,13 @@ myapp/urls.py:
      )
    ]
 
-In the ``Rule`` line, there is a mapping like '/' ->
-'myapp.views.index'.
+В строке начинающейся с ``Rule``, создается отображение
+'/' -> 'myapp.views.index'
 
 myapp/views.py
 ==============
 
-Basically, you are supposed to write your logic here.
+Предназначен для описание логики приложения.
 
 .. code-block:: python
 
@@ -244,31 +245,26 @@ Basically, you are supposed to write your logic here.
    def index(request):
      return render_to_response('myapp/index.html', {'message': 'Hello'})
 
-In the beginning of this file, there are import examples which you may
-often use, so you can copy/paste these lines if you need. In the body,
-there is a view function.
+В начале этого файла есть импорт часто используемых модулей и вы можете копировать/вставлять/удалять эти строки при необходимости. Также в файле присутствуют функция представления.
 
-Basically, with Kay, you're supposed to write functions for
-implementing application logics. Actually, view can be an object which
-has a __call__() method (that means callable), but in this tutorial,
-we define just functions for a time being.
+В основном, используя Kay, вы должны писать функции для описания логики приложения, но в приципе представление может быть объектом, который имеет метод __call__() (т.е. вызываемый объект или callable object). Но в этом руководстве мы будем использовать только функции.
 
 index(request):
+	Функции представления всегда должны принимать объект ``Request`` 
+	в качестве первого аргумента. В зависимости от условий функция
+	представления может иметь дополнительные аргументы, но данная 
+	функция index() их не имеет.
 
-   View functions must be receive a ``Request`` object as its first
-   argument. According to your configuration, a view function can have
-   additional keyword argument, though index() method here is not.
-
-   View functions must return a ``Response`` object. In the first
-   example, we use a function ``render_to_response`` which is for
-   creating a ``Response`` object from an html template and context
-   values.
+	Функции представления всегда должны возвращать объект ``Response``. 
+	В этом примере, мы используем функцию ``render_to_response`` для 
+	создания объекта ``Response`` из HTML шаблона и контекстных 
+	переменных.
 
 
 myapp/templates/index.html
 ==========================
 
-The last one is an html template.
+Последним файлом является HTML шаблон.
 
 .. code-block:: html
 
@@ -283,17 +279,20 @@ The last one is an html template.
    </body>
    </html>
 
-A template engine which is used in Kay is jinja2. Please remember
-following two things about jinja2 first.
+В качестве движка шаблонов Kay использует jinja2. Для начала, пожалуйста, 
+помните две вещи о jinja2:
 
-* To display a context value passed from your view, wrap a name of the
-  value with ``{{}}``. You can call functions by adding
-  parenthesis(and of course you can add arguments inside the
-  parenthessis) as well as just displaying the value.
+* Для отображения контектных переменных, предаваемых из функции представления,
+необходимо расположить имя переменной внутри конструкции ``{{}}`` 
+(например, {{ my_message }}). Добавляя скобки ``()``, вы также можете 
+вызывать функции (и конечно, вы можете добавлять аргументы внутри скобок), 
+для того чтобы отобразить возвращаемый имим результат.
 
-* You can use ``{% %}`` style tags for describing control structures and commands to jinja2 like ``{% if ... %} {% else %} {% endif %}``,  for loops, and ``{% extends "base_templates.html" %}``.
+* Вы можете испльзовать ``{% %}`` как специальные теги для описания управления 
+структурами и команд jinja2, таких как 
+``{% if ... %}`` {% else %} {% ... endif %}``, для циклов и для команд расширения базового шаблона ``{% extends "base_template.html" %}``.
 
-Here is an example usage of ``{% if %}``.
+Вот пример спользования тэга ``{% if %}``.
 
 .. code-block:: html
 
@@ -312,11 +311,12 @@ Here is an example usage of ``{% if %}``.
    </body>
    </html>
 
-In above example, we wrap a displaying part of a message with a 'div',
-and using ``{% if %}`` allows us to display the message div only when
-the message has a certain value.
+В приведенном выше примере, мы обернули блочный элемент div, содержащий 
+коа для отображения сообщения, тэгом {% if %}. В результате сообщение 
+будет отображено только тогда, когда пременная ``message`` имеет 
+какое-нибудь значение. 
 
-Please keep in mind these two syntaxes for the time being.
+Для начала, пожалуйста, запомните эти две синтаксические вещи.
 
 Authentication
 --------------
