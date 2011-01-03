@@ -458,23 +458,22 @@ request.user
 В этом примере, при доступе к индексной странице, осуществляется проверка, 
 вошли ли вы в систему.
 
-Guestbook implementation - Step 1
+Реализация гостевой книги - Шаг 1
 ---------------------------------
 
-In this tutorial, we're gonna create a simple guestbook. I will
-introduce various features as much as possible thorough out the
-tutorial.
+В этом уроке, мы создадим простейшую гостевую книгу. Мы будем использовать
+различные подходы и функциональность для того, чтобы урок был максимально полным и 
+всеобъемлющим.
 
-Firstly, let's look through a basic usage of Models ans Forms.
+Во-первых, давайте рассмотрим использование моделей и форм.
 
-Model Definition
-================
+Определение модели
+==================
 
-To define models, you can basically use appengine's db module
-directly. Additionally there are special properties in ``kay.db``
-package.
+Для определения модели, вы можете использовать db модуль AppEngine.
+Кроме того, есть еще дополнительные свойства описанные в модуле ``kay.db``.
 
-Here is a simple model for the guestbook.
+Это простая модель для гостевой книги, описывающая коментарий:
 
 myapp/models.py:
 
@@ -491,13 +490,15 @@ myapp/models.py:
      body = db.TextProperty(required=True)
      created = db.DateTimeProperty(auto_now_add=True)
 
-``kay.db.OwnerProperty`` which is difined in an attribute ``usser`` is
-a property specially offerred by Kay. This is a property for storing a
-key of a user who sines in automatically.
+``kay.db.OwnerProperty`` который определен как атрибут ``user`` - это 
+свойство специально предлагаемое Kay, которое предназначено для хранения
+ключа пользователя, который определяется автоматически из атрибута 
+request.user (если пользователь неаутентифицирован, то поле будет содержать
+None).
 
-``body`` is a property for storing comment body itself, and
-``created`` stores a date at which the comment is created
-automatically.
+Атрибут ``body`` предназначен для хранения тела коментария, а атрибут
+``created`` предназначен для хранения даты/времени создания коментария и
+создается автоматически (за это отвечает параметр auto_now_add равный True).
 
 
 Form definition
