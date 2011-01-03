@@ -326,19 +326,19 @@ myapp/templates/index.html
 
 Для начала, пожалуйста, запомните эти две синтаксические конструкции.
 
-Authentication
+Аутентификация
 --------------
 
-To enable the user authentication feature, youo need to install a
-middleware for authentication. Kay has various authentication
-backends. We'll use an authentication backend for Google Account in
-this tutorial.
+Для того, чтобы включить фунцию аутентификации пользователей, вы должны 
+установить соответствующее middleware для аутентификации. Kay поддерживает 
+различные варианты аутентификации. В этом руководстве мы будем использовать 
+вариант аутентификации черех Google аккаунт.
 
-Configuration
+Конфигурация
 =============
 
-First, you need to add ``MIDDLEWARE_CLASES`` including
-``kay.auth.middleware.AuthenticationMiddleware``.
+Для начала, вы должны добавить кортеж ``MIDDLEWARE_CLASES`` включая 
+элемент ``kay.auth.middleware.AuthenticationMiddleware``.
 
 .. code-block:: python
 
@@ -346,19 +346,18 @@ First, you need to add ``MIDDLEWARE_CLASES`` including
      'kay.auth.middleware.AuthenticationMiddleware',
    )
 
-Don't forget the comma after the middleware definition because when a
-tuple has only one element, you need to place a comma after the
-element explicitly.
+Не забудьте запятую после элемента 
+``kay.auth.middleware.AuthenticationMiddleware``, т.к. в кортеже из 
+одного элемента требуется конечная запятая
 
-After that, the auth module certainly work properly, I'd recommend you
-define a model for storing information of a user. If you want to have
-additional information later and so on, you can easily do this by your
-own model.
+После этого модуль аутентификации будет работать, но если вы хотите хранить 
+дополнительную информацию о пользователе, то можно легко определить свою 
+модель для хранеия этой дополнительной информации.
 
-If you use the authentication against Google Account and you want to
-define own model, you need to extend ``kay.auth.models.GoogleUser``
-and set the name of this extended model to
-``settings.AUTH_USER_MODEL`` as a string.
+Если вы используете аутентификацию через учетную запись Google и при этом вы 
+хотите определить собственную модель, то вам необходимо расширить класс 
+``kay.auth.models.GoogleUser`` и указать эту модель в строковой переменной 
+``settings.AUTH_USER_MODEL``
 
 myapp.models:
 
@@ -377,38 +376,39 @@ settings.py
    AUTH_USER_MODEL = 'myapp.models.MyUser'
 
 
-How to use
-==========
+Как использовать
+================
 
 request.user
 ++++++++++++
 
-Once you enable the authentication middleware, it will add ``user``
-attribute to the request object. If a user visiting web sites are
-signed in, the content of the user attribute is an entity of the User
-model, otherwise an instance of a class
-``kay.auth.models.AnonymousUser``.
+После включения middleware аутентификации, оно добавит атрибут ``user`` 
+в объект ``request``. Если пользователь посещающий сайты залогонился, то 
+атрибут ``user`` будет содержать объект модели описывающей пользователя 
+(например, объект MyUser), в противном случае атрибут ``user`` будет 
+содержать экземпляр объекта ``kay.auth.models.AnonymousUser``.
 
-Here are common attributes and methods between those classes.
+Эти классы имеют следующие общие методы и атрибуты:
 
 * is_admin
-
-  This attribute indicates if the user is an administrator as a
-  boolean value.
+  
+  Этот логический (булевый) атрибут указывает является ли пользователь 
+администратором.
 
 * is_anonymous()
 
-  This method returns False if the user is signed in, otherwise, True.
+  Этот метод возвращает False если пользователь аутентифицирован, 
+в противном случае возвращается True
 
 * is_authenticated()
+  Этот метод возвращает True если пользователь аутентифицирован, иначе 
+возвращается False.
 
-  This method returns True if the user is signed in, otherwise, False.
 
+Пример использования в шаблоне
+++++++++++++++++++++++++++++++
 
-An example usage in template
-++++++++++++++++++++++++++++
-
-Let's put a fragment of code like following.
+Скажем, фрагмент кода наподобие нижеследующего.
 
 .. code-block:: html
 
@@ -420,19 +420,23 @@ Let's put a fragment of code like following.
      {% endif %}
    </div>
 
-This part of code will show a link for the login screen if the user
-doesn't sign in, otherwise, a link for signing out.
+Этот кусок кода будет показывать ссылку на экран аутентификации, если 
+пользователь не аутентифицирован, в противном случае будет отображена 
+ссылка для выхода.
 
-Decorators
+Декораторы
 ++++++++++
 
-To protect a page from anonymous access, you can use following
-decorators.  You can use ``kay.auth.decorators.login_required`` for
-the page needs just an authorization and can use
-``kay.auth.decorators.admin_required`` if the page has an admin
-restriction.
+Для защиты страницы от анонимного доступа, вы можете использовать 
+следующие декораторы:
 
-Example:
+* вы можете использовать ``kay.auth.decorators.login_required`` для страниц, 
+которые требуют авторизации пользователя.
+
+* также вы можете использовать ``kay.auth.decorators.admin_required`` если 
+страница имеет администраторские ограничения.
+
+Например:
 
 .. code-block:: python
 
@@ -445,9 +449,8 @@ Example:
    def index(request):
      return render_to_response('myapp/index.html', {'message': 'Hello'})
 
-Let's confirm that you're recested to sign in when accessing the index
-page.
-
+В этом примере, при доступе к индексной странице, осуществляется проверка, 
+вошли ли вы в систему.
 
 Guestbook implementation - Step 1
 ---------------------------------
