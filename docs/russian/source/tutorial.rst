@@ -534,10 +534,10 @@ myapp/forms.py:
 ``kay.utils.forms`` модуля.
 
 
-View definition
-===============
+Определение представления
+=========================
 
-Let's write a view with these models and forms.
+Давайте напишем представление для вышериведенных модели и формы.
 
 myapp/views.py:
 
@@ -570,17 +570,17 @@ myapp/views.py:
      return render_to_response('myapp/index.html',
 			       {'form': form.as_widget()})
 
-You can see the new import statement of four lines:
-``werkzeug.redirect``, ``kay.utils.url_for``, and newly created models
-and forms. You can see that this view creates a form and validate
-values from a form if the request method is POST.
+Вы можете видеть операторы импорта в четыерх линиях:
+``werkzeug.redirect``, ``kay.utils.url_for`` и только что созданных
+модели и формы. Вы можете увидеть, что это представлнеи создает форму
+и проверяет значения формы, если request предается методом POST.
 
-After the validation succeeds, this view creates a new entity of
-``Comment``, and redirect to the top page.
+После успешной проверки данное представление создает новый объект
+класса ``Comment`` и делает перенаправление на главную страницу.
 
-``url_for`` is a function for URL reverse lookup, and returns a URL
-for an endpoint which is given as an argument. Let's look back the
-default urls.py.
+``url_for`` - это функция для обратного поиска URL и возвращает этот
+URL для конечной точки, которая передается в качестве аргумента. Теперь
+давайте посмотрим на сгенерированыый по умолчанию файл ``urls.py``.
 
 .. code-block:: python
 
@@ -590,16 +590,15 @@ default urls.py.
      )
    ]
 
-In this ``urls.py``, we set 'index' as an endpoint. Hawever, when it
-comes to reverse lookup, we used 'myapp/index'. Actually Kay adds an
-application name and a slash to an endpoint automatically in order to
-avoid conflicts between endpoints from multiple applications.
+В ``urls.py`` мы устанавливаем 'index' как конечную точку. Конечно, когда
+используется обратный поиск, то мы используем 'myapp/index'. Это необходимо
+из-за того, что Kay автоматически добавляет в конечную точку названия приложений
+и слэш. Это делается для избежания конфликтов между конечными точками различных
+приложений и именно поэтому небходимо указывать конечную точку как 
+``название_приложения/конечная_точка``.
 
-So, you need to specify an endpoint like ``app_name/endpoint``.
-
-
-Template
-========
+Шаблон
+======
 
 .. code-block:: html
 
@@ -624,17 +623,17 @@ Template
    </body>
    </html>
 
+Теперь вы можете сохранять коментарии, отправленные из формы в хранилище.
 Now you can store comments submitted from the form to the datastore.
 
-Let's try submitting on the development server. After submitting some
-comments, you can visit http://localhost:8080/_ah/admin for viewing
-contents of the datastore.
+Теперь давайте попробуем работу отправки коментариев на сервере разработки.
+После отправки нескольких коментариев, вы можете зайти по адресу
+http://localhost:8080/_ah/admin  для просмотра содержимого хранилища.
 
-A kind named ``myapp_comment`` represents entities which you've just
-created. As you can see, Kay adds application name to a kind name. By
-default, Kay adds application name and a single underscore '_' before
-a class name, and lowercases the whole result. You can suppress this
-behavior by setting ``settings.ADD_APP_PREFIX_TO_KIND`` to False.
+Тип называемый ``myapp_comment`` содержит объекты, которые вы только что создали.
+Как вы видите, Kay добавляет имя приложения и знак подчеркивания '_' перед
+именем класса и переводит имя в нижний регистр. Вы можете отключить это поведение,
+установив параметр ``settings.ADD_APP_PREFIX_TO_KIND`` в значение False.
 
 
 Guestbook implementation - Step 2
