@@ -501,16 +501,15 @@ None).
 создается автоматически (за это отвечает параметр auto_now_add равный True).
 
 
-Form definition
-===============
+Определние формы
+================
 
-Next, let's create a form for comment submission. Certainly you can
-write an html form directly in your html templates, considering a
-validation, I'd recommend you to create your form by using
-``kay.utils.forms`` package.
+Далее, создадим форму для отправки коментариев. Конечно, вы можете написать
+эту форму непосредственно в HTML шаблоне, но рекомендуется создавать формы
+с использованием модуля ``kay.utils.forms``.
 
-There is no restriction about where to define your forms though,
-``myapp/forms.py`` is one of appropriate places.
+В принципе не существует никаких ограничений в том, где определять формы, например
+файл ``myapp/forms.py`` может быть одним из таких мест.
 
 myapp/forms.py:
 
@@ -523,15 +522,16 @@ myapp/forms.py:
    class CommentForm(forms.Form):
      body = forms.TextField("Your Comment", required=True)
 
-You can define a form by creating a class that extends
-``kay.utils.forms.Form``. In this example, ``body`` is an instance of
-``form.TextField`` class. The first argument will become a label of a
-generated form. If you specify ``required`` as True, the field will be
-a mandatry field.
+Вы можете определить форму, создав класс, который расширяет класс
+``kay.utils.forms.Form``. В этом примере, ``body`` - это экземпляр класса
+``form.TextFiled``. Первый аргумент - это метка поля генерируемой формы, 
+которая будет представлена в виде соответсвующего HTML тэга <label>.
+Если вы укажете параметр ``required`` равный True, то данное поле будет
+обязательным для заполнения.
 
-For more details about this form library, please refer to a `document
-<http://kay-docs-jp.shehas.net/forms_reference.html>`_ about
-``kay.utils.forms`` package.
+Для более детальной информации об этой билиотеке форм, пожалуйста, обратитесь к 
+`описанию <http://kay-docs-jp.shehas.net/forms_reference.html>`_ 
+``kay.utils.forms`` модуля.
 
 
 View definition
