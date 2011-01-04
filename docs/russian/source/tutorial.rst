@@ -636,14 +636,15 @@ http://localhost:8080/_ah/admin  для просмотра содержимог�
 установив параметр ``settings.ADD_APP_PREFIX_TO_KIND`` в значение False.
 
 
-Guestbook implementation - Step 2
+Реализация гостевой книги - Шаг 2
 ---------------------------------
 
-In the current implementation, if you submit comments, you can not see
-the changes. So let's display the latest 20 comments on the top page.
+В текущей реализации, если вы отсылаете коментарии, то вы не видите изменений.
+Давайте добавим возможность отображения последних 20 коментариев на главной
+странице.
 
-Using queries
-=============
+Использование запросов
+======================
 
 myapp/views.py:
 
@@ -666,12 +667,12 @@ myapp/views.py:
 			       {'form': form.as_widget(),
 				'comments': comments})
 
-The code above passes the latest 20 comments to a template.
+Этот код отсылает последние 20 коментариев в шаблон.
 
-Looping in a template
-=====================
+Цикл в шаблоне
+==============
 
-Let's display the comments in the template.
+Теперь давайте добавим отображение этих коментариев в шаблоне.
 
 myapp/templates/index.html:
 
@@ -688,8 +689,8 @@ myapp/templates/index.html:
     </div>
   {% endif %}
 
-Please add the code above to the template and put it under the part
-which displays the form. Now you can see the latest 20 comments.
+Пожалуйста, добавте этот код в описанный выше шаблон, сразу после части, которая
+отображает форму. Теперь, обновив страницу, вы увидите последние 20 коментариев.
 
 Guestbook implementation - Step 3
 ---------------------------------
