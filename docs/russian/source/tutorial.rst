@@ -692,18 +692,18 @@ myapp/templates/index.html:
 Пожалуйста, добавте этот код в описанный выше шаблон, сразу после части, которая
 отображает форму. Теперь, обновив страницу, вы увидите последние 20 коментариев.
 
-Guestbook implementation - Step 3
+Реализация гостевой книги - Шаг 3
 ---------------------------------
 
-Let's add a capability for selecting a category from a list of
-categories which are pre-defined.
+Теперь давайте добавим возможность выбора категории из списка категорий, которые
+будут пердварительно определены.
 
 
-Using ModelForm
-===============
+Использование ModelForm
+=======================
 
-First, please create a model for storing categories and add a property
-for storing a category to the ``Comment`` class.
+Для начала, создадим модель для хранения категорий и добавим свойство для
+категории в класс ``Comment``.
 
 myapp/models.py:
 
@@ -721,11 +721,11 @@ myapp/models.py:
      body = db.StringProperty(required=True, verbose_name=u'Your Comment')
      created = db.DateTimeProperty(auto_now_add=True)
 
-Next, to maintain both of models and forms is a bit cumbersome, so you
-can use a feature for creating models automatically from model
-definitions to avoid this.
+Далее, поддержка обеих моделей и форм может быть немного громоздкой, поэтому вы
+можете использовать возможность автоматического создания формы из сответсвующего
+определения модели.
 
-To do this, please create a form extended from
+Для этого создайте класс формы расширяющий класс
 ``kay.utils.forms.modelform.ModelForm``.
 
 .. code-block:: python
@@ -742,38 +742,39 @@ To do this, please create a form extended from
        model = Comment
        exclude = ('user', 'created')
 
-First, you need to define a class extended from ``ModelForm`` and
-define an inner class named ``Meta`` inside of the class. There are
-several class attributes for configuring your ModelForm as follows:
+Во-первых, вы дожны определить класс расширяющий класс ``ModelForm`` и 
+внутри этого класса определите внутренний класс с именем ``Meta``. У этого 
+класса есть несколько атрибутув, предназначенных для конфигурации вашей
+ModelForm:
 
 * model
-
-  define a model class which a new form will be based on.
+  определяет класс модели, на которой будет основываться новая форма.
 
 * exclude
-
+  
+  кортеж, который определяет свойства, которые вы хотели бы исключить из формы.
   define properties which you want to exclude from a form as
-  tuple. This ``exclude`` and the next ``fields`` are mutually
-  exclusive. You can define only one of them at a time.
+  tuple. Этот атрибут ``exclude`` и следующий атрибут ``fields`` являются
+  взаимно эксклюзивными, т.е. вы можете определить только один из них.
 
 * fields
-
-  define properties which you want to include in a form as tuple.
+  кортеж, который предназначен для свойств модели, которые вы бы хотели 
+  включить в форму.
 
 * help_texts
+  
+  определяет тексты-подсказки, которые будут отображаться в форме. Описывается в
+  виде словаря, ключами которого являются имена полей заданной модели.
 
-  define help texts which will be displayed with forms as a dictionary
-  with field names as keys.
-
-
-Lastly, you need to change how to save your entity in your myapp/views.py.
+И наконец нужно изменить способ сохранения объекта в функции представления в
+``myapp/vews.py``.
 
 .. code-block:: python
 
        comment = Comment(body=form['body'])
        comment.put()
 
-Change above these lines in myapp/views.py to as follows:
+Замените указанные выше строчки кода следующей строкой:
 
 .. code-block:: python
 
