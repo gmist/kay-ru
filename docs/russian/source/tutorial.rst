@@ -781,15 +781,15 @@ ModelForm:
        comment = form.save()
 
 
-Custom management scripts
-=========================
+Пользовательские скрипты управления
+===================================
 
-For now, you can see a form for selectiong a category, but there's no
-Category entity in the datastore, so the created select box has no
-candidate. Let's create a custom management script which will add
-categories to the datastore.
+Теперь, вы можете видеть форму для выбора категории, но она не содержит объеков
+Category в хранилище данных и именно поэтому в выпадающем списке нет ни одной
+позиции для выбора. Давайте теперь создадим пользовательскй скрипт управления,
+который добавит категории в хранилище.
 
-Please add a file named ``myapp/management.py`` with following content.
+Пожалуйста, добавьте файл с названием ``myapp/management.py`` со следующим кодом.
 
 .. code-block:: python
 
@@ -823,7 +823,7 @@ Please add a file named ``myapp/management.py`` with following content.
      main_func=create_categories, clean_func=delete_categories,
      description="Create 'Category' entities")
 
-After that, you can see following entries in the output of the command
+После этого, вы можете видеть следующие записи в выводе команды
 ``manage.py``::
 
   create_categories:
@@ -835,27 +835,25 @@ After that, you can see following entries in the output of the command
     --no-secure
     -c, --clean
 
-You can add 3 entities of ``Category`` as follows:
+Вы можете добавить 3 объекта класс ``Category`` следующим образом:
 
-* against appspot
+* на appspot
 
 .. code-block:: bash
 
   $ python manage.py create_categories
 
-* against devserver
+* на devserver
 
 .. code-block:: bash
 
   $ python manage.py create_categories -h localhost:8080 --no-secure
 
-Please add 3 entities of ``Category``, and access your application
-again. Can you see 3 candidates in the select box?
+Пожалуйста добавьте эти 3 объекта ``Category`` и обновите старницу вышего приложения. Теперь вы видите 3 варинта выбора в выпадающем списке?
 
 .. Note::
-
-   For more details about how to create custom management scripts,
-   refer to `Adding your own management script
+   Для более детальной информации о том, как создавать пользовательские 
+   скрипты управления обратитесь к `Adding your own management script
    <http://kay-docs.shehas.net/manage_py.html#adding-your-own-management-script>`_
 
 
