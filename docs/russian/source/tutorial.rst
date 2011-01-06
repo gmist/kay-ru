@@ -19,7 +19,7 @@
   * py25-pil
   * py25-ipython (рекомендуется)
 
-Если вы хотите забирать Kay из репозитория, вы должны установить mercurial::
+Если вы хотите забрать Kay из репозитория, вы должны установить mercurial::
 
   * mercurial
 
@@ -849,7 +849,8 @@ Category в хранилище данных и именно поэтому в в
 
   $ python manage.py create_categories -h localhost:8080 --no-secure
 
-Пожалуйста добавьте эти 3 объекта ``Category`` и обновите старницу вышего приложения. Теперь вы видите 3 варинта выбора в выпадающем списке?
+Пожалуйста, добавьте эти 3 объекта ``Category`` и обновите старницу вышего
+приложения. Теперь вы видите 3 варинта для выбора в выпадающем списке?
 
 .. Note::
    Для более детальной информации о том, как создавать пользовательские 
@@ -857,10 +858,10 @@ Category в хранилище данных и именно поэтому в в
    <http://kay-docs.shehas.net/manage_py.html#adding-your-own-management-script>`_
 
 
-Displaying category
-===================
+Отображение категории
+=====================
 
-The code bellow allows you to show categories on the comment list page.
+Следующий ниже код показывает категории на странице со списком коментариев.
 
 .. code-block:: python
 
@@ -880,14 +881,18 @@ The code bellow allows you to show categories on the comment list page.
      {% endif %}
 
 
-Automatic CRUD creation
-=======================
+Автоматическая CRUD генерация
+=============================
 
-Let's create pages for managing the categories. Here, we're gonna
-create pages for adding/deleting/modifying categories restricted only
-to admins.
+CRUD — (англ. create read update delete — «Создание чтение обновление удаление»)
+сокращённое именование 4 базовых функций управления данными — 
+создание, чтение, редактирование и удаление.
 
-First, create a form for ``Category``.
+Давайте создадим страницы для управления категориями. Мы создадим страницы
+для добавления/удаления/изменения категорий, которые будут доступны только
+для адмистраторов.
+
+Во-первых, создадим форму для класса ``Category``.
 
 myapp/forms.py:
 
@@ -911,9 +916,9 @@ myapp/forms.py:
      class Meta:
        model = Category
 
-Import ``Category`` and create a new form named ``CategoryForm``.
+Импортируем ``Catagory`` и создадим новую форму с названием ``CategoryForm``.
 
-Next, edit ``myapp/urls.py`` as follows:
+Затем, отредактируем ``myapp/urls.py`` следующим образом:
 
 .. code-block:: python
 
@@ -935,8 +940,8 @@ Next, edit ``myapp/urls.py`` as follows:
      CategoryCRUDViewGroup(),
    ]
 
-Lastly, add ``kay.utils.flash.FlashMiddleware`` to
-``settings.MIDDLEWARE_CLASSES`` as follows:
+И наконец, добавьте ``kay.utils.flash.FlashMiddleware`` в  
+``settings.MIDDLEWARE_CLASSES`` так как указано ниже:
 
 .. code-block:: python
 
@@ -945,34 +950,35 @@ Lastly, add ``kay.utils.flash.FlashMiddleware`` to
      'kay.utils.flash.FlashMiddleware',
    )
 
-You can see a list of categories at: http://localhost:8080/category/list
+Теперь вы можете увидеть список категорий по адресу:
+http://localhost:8080/category/list
 
 .. Note::
-
-   For more details about CRUD creation, refer to `Using generic view
+   Для более подробной информации о CRUD, обратитесь к `Using generic view
    groups <http://kay-docs.shehas.net/generic_views.html>`_.
 
 
-Cascade deletion with db_hook
-=============================
+Каскадное удаление с db_hook
+============================
 
-As you may notice, if you delete a category which has one or more
-comments in it, an error occurs when displaying those comments.
+Как вы могди заметить, если вы удалите категорию, с которой связаны один или
+более коментариев, то возникнет ошибка при отображении этих коментариев.
 
-Here, we will use ``db_hook`` feature for implementing cascade
-deletion.
+Для решения данной проблемы мы задействуем ``db_hook`` для реализации
+каскадного удаления.
 
-If you got the error I mentioned above, please delete comments in
-question, or stop a development server once, and restart it with
-``-c`` option, and create desired entities again before going further.
+Если вы уже удалили одну или несколько категрий и получили упоминавшуюся выше
+ошибку, то перед тем как продолжить, удалите коментарии, которые используют
+эту категорию, либо перезапустите сревер рзработки с опцией ``-c`` и
+заполните базу новыми элементами.
 
-First, you need to enable ``db_hook`` feature in the ``settings.py``.
+Во-первых, вы должны включиь функциональность ``db_hook`` в ``settings.py``.
 
 .. code-block:: python
 
    USE_DB_HOOK = True
 
-Next, register your hook function in ``myapp/__init__.py`` as follows:
+Затем, зарегистрировать ваш хук в ``myapp/__init__.py`` следующим образом:
 
 myapp/__init__.py:
 
@@ -995,15 +1001,13 @@ myapp/__init__.py:
 
    register_pre_delete_hook(cascade_delete, Category)
 
-In above example, cascade deletion is implemented in a very ad-hoc
-way, so you might need to implement it more carefully if in production
-code.
+В приведенном выше примере, каскадное удаление реализовано весьма специфическим
+способом, в продакшн коде вы должны использовать более безопасную реализацию.
 
-Then, if you delete any category, all the comments that belongs to the
-category should be deleted.
+Теперь, если вы удаляете категорию, то все коментарии, которые зависят от этой категории, также будут удалены.
 
 .. Note::
 
-   For more details about db_hook feature, refer to `Using db_hook
-   feature <http://kay-docs.shehas.net/db_hook.html>`_.
+   Для более детальной информации о фунциональности db_hook, обратитесь к 
+   `Using db_hook feature <http://kay-docs.shehas.net/db_hook.html>`_.
 
