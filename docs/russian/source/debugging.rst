@@ -123,34 +123,35 @@ http://paste.shehas.net/ . Если отправка трассировки бу
 Исключения в шаблонах Jinja2
 ----------------------------
 
-If an exception occurs in Jinja2 template, you will see wired
-traceback on the debugger. That is because of the restriction of
-appengine( can not use ctypes). For a workaround, we can patch
-dev_appserver.py in appengine SDK.
+Если исключение возникает в шаблоне Jinja2, то вы увидите "телеграфную"
+и плохо читаемую трассировку внутри отладчика. Это происходит из-за
+ограничения AppEngine (он не использует ctypes). Для обхода этого ограничения
+вы можете использовать обход в виде патча dev_appserver.py в AppEngine SDK.
 
-After adding 'gestalt' and '_ctypes' to the list
-``_WHITE_LIST_C_MODULES``, you can see normal tracebacks on the
-debugger.
+После добавления модулей 'gestalt' и '_ctypes' в список
+``_WHITE_LIST_C_MODULES`` вы увидите нормальное отображение трассировки внутри
+отладчика.
 
-Having said that, some python distribution has a broken ctypes(ex:
-recent python25 in macports), and above workaround won't work with
-broken ctypes. In such a case, copying _speedups.so into the directory
-``kay/lib/jinja2`` from another jinja2 installation(not from bundled
-in Kay), and adding '_speedups' to the list ``_WHITE_LIST_C_MODULES``
-could be another workaround. If you're using MacOSX, the easiest way
-to get compiled _speedups.so is to install py25-jinja2 with macports.
+Нужно сказать, что некоторые дистрибутивы Python имеет поломанную версию
+ctypes (например, последняя версия python25 в macports) и описанный выше
+обходной способ может не работать. В этом случае есть еще одит обходной способ
+в виде копирования '_speedups.so' в директорию ``kay/lib/jinja2`` из другой
+инсталяции jinja2 (т.е. не из поставки Kay) и добавления '_speedups' в список
+``_WHITE_LIST_C_MODULES``. Если вы используете MacOSX, то наиболее простым
+способом получения скомпилированнокго '_speedus.so' будет  установка
+py25-jinja2 из macports.
 
 
-Using pdb
-=========
+Использование pdb
+=================
 
-You can also use pdb for debugging in dev environment. If you invoke
-:func:`kay.utils.set_trace` anywhere on your code, the execution of
-your program will stop. You can see a pdb prompt on the console in
-which you invoked ``manage.py runserver``.
+В процессе разработки вы также можете использовать pdb. Если вы вызовете
+:func:`kay.utils.set_trace` в любом месте вышего кода, то выполнение вашей
+программы остановится и вы увидите строку приглашения pdb в консоле, в которой
+вы запустили сервер разработки (``manage.py runserver``).
 
-For example, you can execute your program step by step with a command
-``step``. For more details how to use pdb, please refer to following
-URL:
+Например, вы можете вы можете пошагово выполнить вышу программу с помошью
+команды ``step``. Для более подробной информации, как использовать PDB,
+обратитесь к документации по следующему URL:
 
 * http://www.python.org/doc/2.5.4/lib/debugger-commands.html
