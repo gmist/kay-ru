@@ -252,6 +252,6 @@ TODO
 ====
 
 * Image handling
-* More detailed references
+* Более детальные ссылки
 
 
