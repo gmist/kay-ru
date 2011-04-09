@@ -3,7 +3,7 @@
 ==============
 
 Подготовка
------------
+----------
 
 Инсталируйте следующие зависимости::
 
@@ -18,8 +18,11 @@
   * py25-socket-ssl
   * py25-pil
   * py25-ipython (рекомендуется)
+  * также можно установить AppEngine из macports - py26-googleappengine
+    (не стоит обращать внимание на префикс py26 - все прекрасно работает
+    и на версии python 2.5)
 
-Если вы хотите забирать Kay из репозитория, вы должны установить mercurial::
+Если вы хотите забрать Kay из репозитория, вы должны установить mercurial::
 
   * mercurial
 
@@ -31,7 +34,8 @@
 
 Если вы хотите использовать стабильную версию Kay, вы можете скачать
 ее в виде архива по следующей ссылке:
-http://code.google.com/p/kay-framework/downloads/list и затем распаковать ее:
+http://code.google.com/p/kay-framework/downloads/list и затем распаковать ее
+следующим образом:
 
 .. code-block:: bash
 
@@ -39,11 +43,11 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
 
 .. Note::
     В этом руководстве используются примеры с использованием Kay-0.10.0
-    или выше.Следовательно, для того, чтобы примеры работали,
+    или выше. Следовательно, для того, чтобы примеры работали,
     вы также должны использовать Kay-0.10.0 или выше
     (например, последнюю версию из репозитория).
 
-Если вы инстталировали App Engine SDK из zip архива,
+Если вы инсталировали App Engine SDK из zip архива или из macports,
 то вам необходимо создать символьную ссылку на него следующим образом:
 
 .. code-block:: bash
@@ -84,14 +88,14 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
 	На платформах, которые поддерживают символьные ссылки, директория
 	``kay`` и файл ``manage.py`` будут созданы в виде этих ссылок.
 
-
 Создание приложения
-=======================
-Используя Kay необходимо создать по крайне мере одно приложение в вашем проекте.
+===================
+Используя Kay необходимо создать по крайне мере одно приложение в вашем 
+проекте.
 
 Перейдите в только что созданную директорию проекта ``myproject`` и
-создайте ваше первое приложение. В приведенном ниже примере, создаваемое приложение
-называется ``myapp``.
+создайте ваше первое приложение. В приведенном ниже примере, создаваемое 
+приложение называется ``myapp``.
 
 .. code-block:: bash
 
@@ -111,10 +115,10 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
 После создания приложения, вам необходимо отредактировать файл ``settings.py``
 для того, чтобы зарегистрировать созданное приложение в проекте.
 
-Для начала добавьте ``myapp`` в кортеж ``settings.INSTALLED_APPS``. При
-необходимости вы можете изменить URL для этого приложения изменив словарь
-``APP_MOUNT_POINTS``. В приведенном ниже примере показано, как привязать
-ваше приложение к URL '/'.
+Для начала, добавьте ``myapp`` в кортеж ``settings.INSTALLED_APPS``. При
+необходимости вы можете изменить привязку URL для этого приложения изменив
+словарь ``APP_MOUNT_POINTS``. В приведенном ниже примере показано,
+как привязать ваше приложение к URL '/'.
 
 settings.py
 
@@ -154,8 +158,8 @@ settings.py
   ...
   INFO     ... Running application myproject on port 8080: http://localhost:8080
 
-Вы увидите просто 'Hello' в вашем браузере, если зайдете по адресу
-http://localhost:8080/.
+Вы увидите надпись 'Hello' в вашем браузере, если зайдете по адресу
+http://localhost:8080/ .
 
 
 Развертывание
@@ -172,18 +176,18 @@ http://localhost:8080/.
 
 В процессе развертывания у вас будет запрошены имя пользователя и пароль,
 пожалуйста введите их, чтобы подтвердить ваши полномочия. После окончания
-развертывания вы можете получить доступ к приложению по
-адресу http://your-appid.appspot.com/.
+развертывания вы можете получить доступ к приложению по адресу
+http://your-appid.appspot.com/ .
 
 
-Quick look into a skelton
--------------------------
+Быстрый обзор сгенерированного каркаса приложения
+-------------------------------------------------
 
 myapp/urls.py
 =============
 
-First, here is a default ``urls.py``. You can configure a mapping
-between URLs and your views here.
+Первым делом рассмотрим сгенерированный файл ``urls.py``. В нем вы можете 
+конфигурировать отображение между URLs и представлениями.
 
 myapp/urls.py:
 
@@ -199,13 +203,14 @@ myapp/urls.py:
      )
    ]
 
-In the ``Rule`` line, there is a mapping like '/' ->
-'myapp.views.index'.
+В строке начинающейся с ``Rule``, создается отображение 
+'/' -> 'myapp.views.index'
+
 
 myapp/views.py
 ==============
 
-Basically, you are supposed to write your logic here.
+Предназначен для описание логики приложения.
 
 .. code-block:: python
 
@@ -244,31 +249,31 @@ Basically, you are supposed to write your logic here.
    def index(request):
      return render_to_response('myapp/index.html', {'message': 'Hello'})
 
-In the beginning of this file, there are import examples which you may
-often use, so you can copy/paste these lines if you need. In the body,
-there is a view function.
+В начале этого файла есть импорт часто используемых модулей и вы можете 
+копировать/вставлять/удалять эти строки при необходимости. 
+Также в файле присутствуют функция представления index().
 
-Basically, with Kay, you're supposed to write functions for
-implementing application logics. Actually, view can be an object which
-has a __call__() method (that means callable), but in this tutorial,
-we define just functions for a time being.
+В основном, используя Kay, вы должны писать функции для описания логики 
+приложения, но в приципе представление может быть объектом, 
+который имеет метод __call__() (т.е. вызываемый объект или callable object). 
+Но в этом руководстве мы будем использовать только функции.
 
 index(request):
+	Функции представления всегда должны принимать объект ``Request`` 
+	в качестве первого аргумента. В зависимости от условий функция
+	представления может иметь дополнительные аргументы, но данная 
+	функция index() их не имеет.
 
-   View functions must be receive a ``Request`` object as its first
-   argument. According to your configuration, a view function can have
-   additional keyword argument, though index() method here is not.
-
-   View functions must return a ``Response`` object. In the first
-   example, we use a function ``render_to_response`` which is for
-   creating a ``Response`` object from an html template and context
-   values.
+	Функции представления всегда должны возвращать объект ``Response``. 
+	В этом примере, мы используем функцию ``render_to_response`` для 
+	создания объекта ``Response`` из HTML шаблона и контекстных 
+	переменных.
 
 
 myapp/templates/index.html
 ==========================
 
-The last one is an html template.
+Последним файлом является HTML шаблон.
 
 .. code-block:: html
 
@@ -283,17 +288,22 @@ The last one is an html template.
    </body>
    </html>
 
-A template engine which is used in Kay is jinja2. Please remember
-following two things about jinja2 first.
+В качестве движка шаблонов Kay использует jinja2. Для начала, пожалуйста, 
+помните две вещи о jinja2:
 
-* To display a context value passed from your view, wrap a name of the
-  value with ``{{}}``. You can call functions by adding
-  parenthesis(and of course you can add arguments inside the
-  parenthessis) as well as just displaying the value.
+* Для отображения контектных переменных, предаваемых из функции представления,
+  необходимо расположить имя переменной внутри конструкции ``{{}}`` 
+  (например, {{ my_message }}). Добавляя скобки ``()``, вы также можете 
+  вызывать функции (и конечно, вы можете добавлять аргументы внутри скобок), 
+  для того чтобы отобразить возвращаемый имим результат.
 
-* You can use ``{% %}`` style tags for describing control structures and commands to jinja2 like ``{% if ... %} {% else %} {% endif %}``,  for loops, and ``{% extends "base_templates.html" %}``.
+* Вы можете испльзовать ``{% %}`` как специальные теги для описания управления 
+  структурами и команд jinja2, таких как 
+  ``{% if ... %}`` {% else %} {% ... endif %}``, для циклов или для команд 
+  расширения базового шаблона ``{% extends "base_template.html" %}``.
 
-Here is an example usage of ``{% if %}``.
+
+Вот пример спользования тэга ``{% if %}``.
 
 .. code-block:: html
 
@@ -312,25 +322,26 @@ Here is an example usage of ``{% if %}``.
    </body>
    </html>
 
-In above example, we wrap a displaying part of a message with a 'div',
-and using ``{% if %}`` allows us to display the message div only when
-the message has a certain value.
+В приведенном выше примере, мы обернули блочный элемент div, содержащий 
+код для отображения сообщения, тэгом {% if %}. В результате этот юлок и 
+сообщение будет отображены только тогда, когда пременная ``message`` имеет 
+какое-нибудь значение. 
 
-Please keep in mind these two syntaxes for the time being.
+Для начала, пожалуйста, запомните эти две синтаксические конструкции.
 
-Authentication
+Аутентификация
 --------------
 
-To enable the user authentication feature, youo need to install a
-middleware for authentication. Kay has various authentication
-backends. We'll use an authentication backend for Google Account in
-this tutorial.
+Для того, чтобы включить фунцию аутентификации пользователей, вы должны 
+установить соответствующее middleware для аутентификации. Kay поддерживает 
+различные варианты аутентификации. В этом руководстве мы будем использовать 
+вариант аутентификации черех Google аккаунт.
 
-Configuration
+Конфигурация
 =============
 
-First, you need to add ``MIDDLEWARE_CLASES`` including
-``kay.auth.middleware.AuthenticationMiddleware``.
+Для начала, вы должны добавить кортеж ``MIDDLEWARE_CLASES`` включая 
+элемент ``kay.auth.middleware.AuthenticationMiddleware``.
 
 .. code-block:: python
 
@@ -338,19 +349,18 @@ First, you need to add ``MIDDLEWARE_CLASES`` including
      'kay.auth.middleware.AuthenticationMiddleware',
    )
 
-Don't forget the comma after the middleware definition because when a
-tuple has only one element, you need to place a comma after the
-element explicitly.
+Не забудьте запятую после элемента 
+``kay.auth.middleware.AuthenticationMiddleware``, т.к. в кортеже из 
+одного элемента требуется конечная запятая
 
-After that, the auth module certainly work properly, I'd recommend you
-define a model for storing information of a user. If you want to have
-additional information later and so on, you can easily do this by your
-own model.
+После этого модуль аутентификации будет работать, но если вы хотите хранить 
+дополнительную информацию о пользователе, то можно легко определить свою 
+модель для хранеия этой дополнительной информации.
 
-If you use the authentication against Google Account and you want to
-define own model, you need to extend ``kay.auth.models.GoogleUser``
-and set the name of this extended model to
-``settings.AUTH_USER_MODEL`` as a string.
+Если вы используете аутентификацию через учетную запись Google и при этом вы 
+хотите определить собственную модель, то вам необходимо расширить класс 
+``kay.auth.models.GoogleUser`` и указать эту модель в строковой переменной 
+``settings.AUTH_USER_MODEL``
 
 myapp.models:
 
@@ -369,38 +379,39 @@ settings.py
    AUTH_USER_MODEL = 'myapp.models.MyUser'
 
 
-How to use
-==========
+Как использовать
+================
 
 request.user
 ++++++++++++
 
-Once you enable the authentication middleware, it will add ``user``
-attribute to the request object. If a user visiting web sites are
-signed in, the content of the user attribute is an entity of the User
-model, otherwise an instance of a class
-``kay.auth.models.AnonymousUser``.
+После включения middleware аутентификации, оно добавит атрибут ``user`` 
+в объект ``request``. Если пользователь посещающий сайты залогонился, то 
+атрибут ``user`` будет содержать объект модели описывающей пользователя 
+(например, объект MyUser), в противном случае атрибут ``user`` будет 
+содержать экземпляр объекта ``kay.auth.models.AnonymousUser``.
 
-Here are common attributes and methods between those classes.
+Эти классы имеют следующие общие методы и атрибуты:
 
 * is_admin
-
-  This attribute indicates if the user is an administrator as a
-  boolean value.
+  
+  Этот логический (булевый) атрибут указывает является ли пользователь
+  администратором.
 
 * is_anonymous()
 
-  This method returns False if the user is signed in, otherwise, True.
+  Этот метод возвращает False если пользователь аутентифицирован,
+  в противном случае возвращается True
 
 * is_authenticated()
+  Этот метод возвращает True если пользователь аутентифицирован, иначе
+  возвращается False.
 
-  This method returns True if the user is signed in, otherwise, False.
 
+Пример использования в шаблоне
+++++++++++++++++++++++++++++++
 
-An example usage in template
-++++++++++++++++++++++++++++
-
-Let's put a fragment of code like following.
+Скажем, фрагмент кода наподобие нижеследующего.
 
 .. code-block:: html
 
@@ -412,19 +423,28 @@ Let's put a fragment of code like following.
      {% endif %}
    </div>
 
-This part of code will show a link for the login screen if the user
-doesn't sign in, otherwise, a link for signing out.
+Этот кусок кода будет показывать ссылку на экран аутентификации, если 
+пользователь не аутентифицирован, в противном случае будет отображена 
+ссылка для выхода.
 
-Decorators
+Декораторы
 ++++++++++
 
-To protect a page from anonymous access, you can use following
-decorators.  You can use ``kay.auth.decorators.login_required`` for
-the page needs just an authorization and can use
-``kay.auth.decorators.admin_required`` if the page has an admin
-restriction.
+Для защиты страницы от анонимного доступа, вы можете использовать 
+следующие декораторы:
 
-Example:
+* ``kay.auth.decorators.login_required``
+
+  вы можете использовать этот декоратор для страниц, которые требуют
+  авторизации пользователя.
+
+* ``kay.auth.decorators.admin_required``
+  
+  этот декоратор вы можете использовать если страница имеет
+  администраторские ограничения.
+
+
+Например:
 
 .. code-block:: python
 
@@ -437,27 +457,25 @@ Example:
    def index(request):
      return render_to_response('myapp/index.html', {'message': 'Hello'})
 
-Let's confirm that you're recested to sign in when accessing the index
-page.
+В этом примере, при доступе к индексной странице, осуществляется проверка, 
+вошли ли вы в систему.
 
-
-Guestbook implementation - Step 1
+Реализация гостевой книги - Шаг 1
 ---------------------------------
 
-In this tutorial, we're gonna create a simple guestbook. I will
-introduce various features as much as possible thorough out the
-tutorial.
+В этом уроке, мы создадим простейшую гостевую книгу. Мы будем использовать
+различные подходы и функциональность для того, чтобы урок был максимально полным и 
+всеобъемлющим.
 
-Firstly, let's look through a basic usage of Models ans Forms.
+Во-первых, давайте рассмотрим использование моделей и форм.
 
-Model Definition
-================
+Определение модели
+==================
 
-To define models, you can basically use appengine's db module
-directly. Additionally there are special properties in ``kay.db``
-package.
+Для определения модели, вы можете использовать db модуль AppEngine.
+Кроме того, есть еще дополнительные свойства описанные в модуле ``kay.db``.
 
-Here is a simple model for the guestbook.
+Это простая модель для гостевой книги, описывающая коментарий:
 
 myapp/models.py:
 
@@ -474,25 +492,26 @@ myapp/models.py:
      body = db.TextProperty(required=True)
      created = db.DateTimeProperty(auto_now_add=True)
 
-``kay.db.OwnerProperty`` which is difined in an attribute ``usser`` is
-a property specially offerred by Kay. This is a property for storing a
-key of a user who sines in automatically.
+``kay.db.OwnerProperty`` который определен как атрибут ``user`` - это 
+свойство специально предлагаемое Kay, которое предназначено для хранения
+ключа пользователя, который определяется автоматически из атрибута 
+request.user (если пользователь неаутентифицирован, то поле будет содержать
+None).
 
-``body`` is a property for storing comment body itself, and
-``created`` stores a date at which the comment is created
-automatically.
+Атрибут ``body`` предназначен для хранения тела коментария, а атрибут
+``created`` предназначен для хранения даты/времени создания коментария и
+создается автоматически (за это отвечает параметр auto_now_add равный True).
 
 
-Form definition
-===============
+Определние формы
+================
 
-Next, let's create a form for comment submission. Certainly you can
-write an html form directly in your html templates, considering a
-validation, I'd recommend you to create your form by using
-``kay.utils.forms`` package.
+Далее, создадим форму для отправки коментариев. Конечно, вы можете написать
+эту форму непосредственно в HTML шаблоне, но рекомендуется создавать формы
+с использованием модуля ``kay.utils.forms``.
 
-There is no restriction about where to define your forms though,
-``myapp/forms.py`` is one of appropriate places.
+В принципе не существует никаких ограничений в том, где определять формы, например
+файл ``myapp/forms.py`` может быть одним из таких мест.
 
 myapp/forms.py:
 
@@ -505,21 +524,22 @@ myapp/forms.py:
    class CommentForm(forms.Form):
      body = forms.TextField("Your Comment", required=True)
 
-You can define a form by creating a class that extends
-``kay.utils.forms.Form``. In this example, ``body`` is an instance of
-``form.TextField`` class. The first argument will become a label of a
-generated form. If you specify ``required`` as True, the field will be
-a mandatry field.
+Вы можете определить форму, создав класс, который расширяет класс
+``kay.utils.forms.Form``. В этом примере, ``body`` - это экземпляр класса
+``form.TextFiled``. Первый аргумент - это метка поля генерируемой формы, 
+которая будет представлена в виде соответсвующего HTML тэга <label>.
+Если вы укажете параметр ``required`` равный True, то данное поле будет
+обязательным для заполнения.
 
-For more details about this form library, please refer to a `document
-<http://kay-docs-jp.shehas.net/forms_reference.html>`_ about
-``kay.utils.forms`` package.
+Для более детальной информации об этой билиотеке форм, пожалуйста, обратитесь к 
+`описанию <http://kay-docs-jp.shehas.net/forms_reference.html>`_ 
+``kay.utils.forms`` модуля.
 
 
-View definition
-===============
+Определение представления
+=========================
 
-Let's write a view with these models and forms.
+Давайте напишем представление для вышериведенных модели и формы.
 
 myapp/views.py:
 
@@ -552,17 +572,17 @@ myapp/views.py:
      return render_to_response('myapp/index.html',
 			       {'form': form.as_widget()})
 
-You can see the new import statement of four lines:
-``werkzeug.redirect``, ``kay.utils.url_for``, and newly created models
-and forms. You can see that this view creates a form and validate
-values from a form if the request method is POST.
+Вы можете видеть операторы импорта в четыерх линиях:
+``werkzeug.redirect``, ``kay.utils.url_for`` и только что созданных
+модели и формы. Вы можете увидеть, что это представлнеи создает форму
+и проверяет значения формы, если request предается методом POST.
 
-After the validation succeeds, this view creates a new entity of
-``Comment``, and redirect to the top page.
+После успешной проверки данное представление создает новый объект
+класса ``Comment`` и делает перенаправление на главную страницу.
 
-``url_for`` is a function for URL reverse lookup, and returns a URL
-for an endpoint which is given as an argument. Let's look back the
-default urls.py.
+``url_for`` - это функция для обратного поиска URL и возвращает этот
+URL для конечной точки, которая передается в качестве аргумента. Теперь
+давайте посмотрим на сгенерированыый по умолчанию файл ``urls.py``.
 
 .. code-block:: python
 
@@ -572,16 +592,15 @@ default urls.py.
      )
    ]
 
-In this ``urls.py``, we set 'index' as an endpoint. Hawever, when it
-comes to reverse lookup, we used 'myapp/index'. Actually Kay adds an
-application name and a slash to an endpoint automatically in order to
-avoid conflicts between endpoints from multiple applications.
+В ``urls.py`` мы устанавливаем 'index' как конечную точку. Конечно, когда
+используется обратный поиск, то мы используем 'myapp/index'. Это необходимо
+из-за того, что Kay автоматически добавляет в конечную точку названия приложений
+и слэш. Это делается для избежания конфликтов между конечными точками различных
+приложений и именно поэтому небходимо указывать конечную точку как 
+``название_приложения/конечная_точка``.
 
-So, you need to specify an endpoint like ``app_name/endpoint``.
-
-
-Template
-========
+Шаблон
+======
 
 .. code-block:: html
 
@@ -606,27 +625,28 @@ Template
    </body>
    </html>
 
+Теперь вы можете сохранять коментарии, отправленные из формы в хранилище.
 Now you can store comments submitted from the form to the datastore.
 
-Let's try submitting on the development server. After submitting some
-comments, you can visit http://localhost:8080/_ah/admin for viewing
-contents of the datastore.
+Теперь давайте попробуем работу отправки коментариев на сервере разработки.
+После отправки нескольких коментариев, вы можете зайти по адресу
+http://localhost:8080/_ah/admin  для просмотра содержимого хранилища.
 
-A kind named ``myapp_comment`` represents entities which you've just
-created. As you can see, Kay adds application name to a kind name. By
-default, Kay adds application name and a single underscore '_' before
-a class name, and lowercases the whole result. You can suppress this
-behavior by setting ``settings.ADD_APP_PREFIX_TO_KIND`` to False.
+Тип называемый ``myapp_comment`` содержит объекты, которые вы только что создали.
+Как вы видите, Kay добавляет имя приложения и знак подчеркивания '_' перед
+именем класса и переводит имя в нижний регистр. Вы можете отключить это поведение,
+установив параметр ``settings.ADD_APP_PREFIX_TO_KIND`` в значение False.
 
 
-Guestbook implementation - Step 2
+Реализация гостевой книги - Шаг 2
 ---------------------------------
 
-In the current implementation, if you submit comments, you can not see
-the changes. So let's display the latest 20 comments on the top page.
+В текущей реализации, если вы отсылаете коментарии, то вы не видите изменений.
+Давайте добавим возможность отображения последних 20 коментариев на главной
+странице.
 
-Using queries
-=============
+Использование запросов
+======================
 
 myapp/views.py:
 
@@ -649,12 +669,12 @@ myapp/views.py:
 			       {'form': form.as_widget(),
 				'comments': comments})
 
-The code above passes the latest 20 comments to a template.
+Этот код отсылает последние 20 коментариев в шаблон.
 
-Looping in a template
-=====================
+Цикл в шаблоне
+==============
 
-Let's display the comments in the template.
+Теперь давайте добавим отображение этих коментариев в шаблоне.
 
 myapp/templates/index.html:
 
@@ -671,21 +691,21 @@ myapp/templates/index.html:
     </div>
   {% endif %}
 
-Please add the code above to the template and put it under the part
-which displays the form. Now you can see the latest 20 comments.
+Пожалуйста, добавте этот код в описанный выше шаблон, сразу после части, которая
+отображает форму. Теперь, обновив страницу, вы увидите последние 20 коментариев.
 
-Guestbook implementation - Step 3
+Реализация гостевой книги - Шаг 3
 ---------------------------------
 
-Let's add a capability for selecting a category from a list of
-categories which are pre-defined.
+Теперь давайте добавим возможность выбора категории из списка категорий, которые
+будут пердварительно определены.
 
 
-Using ModelForm
-===============
+Использование ModelForm
+=======================
 
-First, please create a model for storing categories and add a property
-for storing a category to the ``Comment`` class.
+Для начала, создадим модель для хранения категорий и добавим свойство для
+категории в класс ``Comment``.
 
 myapp/models.py:
 
@@ -703,11 +723,11 @@ myapp/models.py:
      body = db.StringProperty(required=True, verbose_name=u'Your Comment')
      created = db.DateTimeProperty(auto_now_add=True)
 
-Next, to maintain both of models and forms is a bit cumbersome, so you
-can use a feature for creating models automatically from model
-definitions to avoid this.
+Далее, поддержка обеих моделей и форм может быть немного громоздкой, поэтому вы
+можете использовать возможность автоматического создания формы из сответсвующего
+определения модели.
 
-To do this, please create a form extended from
+Для этого создайте класс формы расширяющий класс
 ``kay.utils.forms.modelform.ModelForm``.
 
 .. code-block:: python
@@ -724,53 +744,54 @@ To do this, please create a form extended from
        model = Comment
        exclude = ('user', 'created')
 
-First, you need to define a class extended from ``ModelForm`` and
-define an inner class named ``Meta`` inside of the class. There are
-several class attributes for configuring your ModelForm as follows:
+Во-первых, вы дожны определить класс расширяющий класс ``ModelForm`` и 
+внутри этого класса определите внутренний класс с именем ``Meta``. У этого 
+класса есть несколько атрибутув, предназначенных для конфигурации вашей
+ModelForm:
 
 * model
-
-  define a model class which a new form will be based on.
+  определяет класс модели, на которой будет основываться новая форма.
 
 * exclude
-
+  
+  кортеж, который определяет свойства, которые вы хотели бы исключить из формы.
   define properties which you want to exclude from a form as
-  tuple. This ``exclude`` and the next ``fields`` are mutually
-  exclusive. You can define only one of them at a time.
+  tuple. Этот атрибут ``exclude`` и следующий атрибут ``fields`` являются
+  взаимно эксклюзивными, т.е. вы можете определить только один из них.
 
 * fields
-
-  define properties which you want to include in a form as tuple.
+  кортеж, который предназначен для свойств модели, которые вы бы хотели 
+  включить в форму.
 
 * help_texts
+  
+  определяет тексты-подсказки, которые будут отображаться в форме. Описывается в
+  виде словаря, ключами которого являются имена полей заданной модели.
 
-  define help texts which will be displayed with forms as a dictionary
-  with field names as keys.
-
-
-Lastly, you need to change how to save your entity in your myapp/views.py.
+И наконец нужно изменить способ сохранения объекта в функции представления в
+``myapp/vews.py``.
 
 .. code-block:: python
 
        comment = Comment(body=form['body'])
        comment.put()
 
-Change above these lines in myapp/views.py to as follows:
+Замените указанные выше строчки кода следующей строкой:
 
 .. code-block:: python
 
        comment = form.save()
 
 
-Custom management scripts
-=========================
+Пользовательские скрипты управления
+===================================
 
-For now, you can see a form for selectiong a category, but there's no
-Category entity in the datastore, so the created select box has no
-candidate. Let's create a custom management script which will add
-categories to the datastore.
+Теперь, вы можете видеть форму для выбора категории, но она не содержит объеков
+Category в хранилище данных и именно поэтому в выпадающем списке нет ни одной
+позиции для выбора. Давайте теперь создадим пользовательскй скрипт управления,
+который добавит категории в хранилище.
 
-Please add a file named ``myapp/management.py`` with following content.
+Пожалуйста, добавьте файл с названием ``myapp/management.py`` со следующим кодом.
 
 .. code-block:: python
 
@@ -804,7 +825,7 @@ Please add a file named ``myapp/management.py`` with following content.
      main_func=create_categories, clean_func=delete_categories,
      description="Create 'Category' entities")
 
-After that, you can see following entries in the output of the command
+После этого, вы можете видеть следующие записи в выводе команды
 ``manage.py``::
 
   create_categories:
@@ -816,34 +837,33 @@ After that, you can see following entries in the output of the command
     --no-secure
     -c, --clean
 
-You can add 3 entities of ``Category`` as follows:
+Вы можете добавить 3 объекта класс ``Category`` следующим образом:
 
-* against appspot
+* на appspot
 
 .. code-block:: bash
 
   $ python manage.py create_categories
 
-* against devserver
+* на devserver
 
 .. code-block:: bash
 
   $ python manage.py create_categories -h localhost:8080 --no-secure
 
-Please add 3 entities of ``Category``, and access your application
-again. Can you see 3 candidates in the select box?
+Пожалуйста, добавьте эти 3 объекта ``Category`` и обновите старницу вышего
+приложения. Теперь вы видите 3 варинта для выбора в выпадающем списке?
 
 .. Note::
-
-   For more details about how to create custom management scripts,
-   refer to `Adding your own management script
+   Для более детальной информации о том, как создавать пользовательские 
+   скрипты управления обратитесь к `Adding your own management script
    <http://kay-docs.shehas.net/manage_py.html#adding-your-own-management-script>`_
 
 
-Displaying category
-===================
+Отображение категории
+=====================
 
-The code bellow allows you to show categories on the comment list page.
+Следующий ниже код показывает категории на странице со списком коментариев.
 
 .. code-block:: python
 
@@ -863,14 +883,18 @@ The code bellow allows you to show categories on the comment list page.
      {% endif %}
 
 
-Automatic CRUD creation
-=======================
+Автоматическая CRUD генерация
+=============================
 
-Let's create pages for managing the categories. Here, we're gonna
-create pages for adding/deleting/modifying categories restricted only
-to admins.
+CRUD — (англ. create read update delete — «Создание чтение обновление удаление»)
+сокращённое именование 4 базовых функций управления данными — 
+создание, чтение, редактирование и удаление.
 
-First, create a form for ``Category``.
+Давайте создадим страницы для управления категориями. Мы создадим страницы
+для добавления/удаления/изменения категорий, которые будут доступны только
+для адмистраторов.
+
+Во-первых, создадим форму для класса ``Category``.
 
 myapp/forms.py:
 
@@ -894,9 +918,9 @@ myapp/forms.py:
      class Meta:
        model = Category
 
-Import ``Category`` and create a new form named ``CategoryForm``.
+Импортируем ``Catagory`` и создадим новую форму с названием ``CategoryForm``.
 
-Next, edit ``myapp/urls.py`` as follows:
+Затем, отредактируем ``myapp/urls.py`` следующим образом:
 
 .. code-block:: python
 
@@ -918,8 +942,8 @@ Next, edit ``myapp/urls.py`` as follows:
      CategoryCRUDViewGroup(),
    ]
 
-Lastly, add ``kay.utils.flash.FlashMiddleware`` to
-``settings.MIDDLEWARE_CLASSES`` as follows:
+И наконец, добавьте ``kay.utils.flash.FlashMiddleware`` в  
+``settings.MIDDLEWARE_CLASSES`` так как указано ниже:
 
 .. code-block:: python
 
@@ -928,34 +952,35 @@ Lastly, add ``kay.utils.flash.FlashMiddleware`` to
      'kay.utils.flash.FlashMiddleware',
    )
 
-You can see a list of categories at: http://localhost:8080/category/list
+Теперь вы можете увидеть список категорий по адресу:
+http://localhost:8080/category/list
 
 .. Note::
-
-   For more details about CRUD creation, refer to `Using generic view
+   Для более подробной информации о CRUD, обратитесь к `Using generic view
    groups <http://kay-docs.shehas.net/generic_views.html>`_.
 
 
-Cascade deletion with db_hook
-=============================
+Каскадное удаление с db_hook
+============================
 
-As you may notice, if you delete a category which has one or more
-comments in it, an error occurs when displaying those comments.
+Как вы могди заметить, если вы удалите категорию, с которой связаны один или
+более коментариев, то возникнет ошибка при отображении этих коментариев.
 
-Here, we will use ``db_hook`` feature for implementing cascade
-deletion.
+Для решения данной проблемы мы задействуем ``db_hook`` для реализации
+каскадного удаления.
 
-If you got the error I mentioned above, please delete comments in
-question, or stop a development server once, and restart it with
-``-c`` option, and create desired entities again before going further.
+Если вы уже удалили одну или несколько категрий и получили упоминавшуюся выше
+ошибку, то перед тем как продолжить, удалите коментарии, которые используют
+эту категорию, либо перезапустите сревер рзработки с опцией ``-c`` и
+заполните базу новыми элементами.
 
-First, you need to enable ``db_hook`` feature in the ``settings.py``.
+Во-первых, вы должны включиь функциональность ``db_hook`` в ``settings.py``.
 
 .. code-block:: python
 
    USE_DB_HOOK = True
 
-Next, register your hook function in ``myapp/__init__.py`` as follows:
+Затем, зарегистрировать ваш хук в ``myapp/__init__.py`` следующим образом:
 
 myapp/__init__.py:
 
@@ -978,15 +1003,13 @@ myapp/__init__.py:
 
    register_pre_delete_hook(cascade_delete, Category)
 
-In above example, cascade deletion is implemented in a very ad-hoc
-way, so you might need to implement it more carefully if in production
-code.
+В приведенном выше примере, каскадное удаление реализовано весьма специфическим
+способом, в продакшн коде вы должны использовать более безопасную реализацию.
 
-Then, if you delete any category, all the comments that belongs to the
-category should be deleted.
+Теперь, если вы удаляете категорию, то все коментарии, которые зависят от этой категории, также будут удалены.
 
 .. Note::
 
-   For more details about db_hook feature, refer to `Using db_hook
-   feature <http://kay-docs.shehas.net/db_hook.html>`_.
+   Для более детальной информации о фунциональности db_hook, обратитесь к 
+   `Using db_hook feature <http://kay-docs.shehas.net/db_hook.html>`_.
 
