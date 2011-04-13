@@ -17,6 +17,12 @@ class NullHandler(logging.Handler):
         pass
 
 class ServerErrorTest(GAETestBase):
+  """
+  Regression test for issue 54 that checks to make sure 
+  that responses for error conditions extend BaseResponse.
+
+  http://code.google.com/p/kay-framework/issues/detail?id=54
+  """
   def setUp(self):
     s = LazySettings(
       settings_module='kay.tests.regressiontests.server_error_settings')

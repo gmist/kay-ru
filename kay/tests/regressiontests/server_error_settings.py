@@ -10,7 +10,7 @@ A sample of kay settings.
 """
 
 DEFAULT_TIMEZONE = 'Asia/Tokyo'
-DEBUG = True
+DEBUG = False
 PROFILE = False
 SECRET_KEY = 'ReplaceItWithSecretString'
 SESSION_PREFIX = 'gaesess:'

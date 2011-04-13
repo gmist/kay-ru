@@ -25,6 +25,8 @@ import re
 import sys
 from os import path, listdir, mkdir
 
+from kay.conf import settings
+
 def compile_file(env, src_path, dst_path, encoding='utf-8', base_dir=''):
   """Compiles a Jinja2 template to python code.
   Params:
@@ -57,7 +59,7 @@ def compile_file(env, src_path, dst_path, encoding='utf-8', base_dir=''):
 
 def compile_dir(env, src_path, dst_path, pattern=r'^[^\.].*\..*[^~]$',
                 encoding='utf-8', base_dir=None,
-                negative_pattern=r'^.*\.swp$'):
+                negative_pattern=settings.JINJA2_PRECOMPILATION_EXCLUDES):
   """Compiles a directory of Jinja2 templates to python code.
   Params:
     `env`: a Jinja2 Environment instance.

@@ -101,6 +101,8 @@ class KayApp(object):
     self._request_middleware = self._response_middleware = \
         self._view_middleware = self._exception_middleware = None
     self.auth_backend = None
+    self.use_ereporter = 'kay.ext.ereporter' in app_settings.INSTALLED_APPS
+    self.init_ereporter()
 
   @property
   def jinja2_env(self):
@@ -138,21 +140,21 @@ class KayApp(object):
     mod = import_string(url_module)
     if hasattr(mod, 'view_groups'):
       base_rules = []
-      self.views = {}
+      views = {}
       for view_group in getattr(mod, 'view_groups'):
         try:
           base_rules = base_rules + view_group.get_rules()
-          self.views.update(view_group.get_views())
+          views.update(view_group.get_views())
         except Exception, e:
           logging.error("Failed to mount ViewGroup: %s", e)
           raise
       import copy
-      self.url_map = Map(copy.deepcopy(base_rules))
+      url_map = Map(copy.deepcopy(base_rules))
     else:
       make_url = getattr(mod, 'make_url')
       all_views = getattr(mod, 'all_views')
-      self.views = all_views
-      self.url_map = make_url()
+      views = all_views
+      url_map = make_url()
     for app in self.get_installed_apps():
       mountpoint = self.get_mount_point(app)
       if mountpoint is None:
@@ -174,7 +176,7 @@ class KayApp(object):
           try:
             endpoint_prefix = app.split(".")[-1]
             rules = rules + view_group.get_rules(endpoint_prefix)
-            self.views.update(view_group.get_views(endpoint_prefix))
+            views.update(view_group.get_views(endpoint_prefix))
           except Exception, e:
             logging.error("Failed to mount ViewGroup: %s", e)
             raise
@@ -184,8 +186,8 @@ class KayApp(object):
           rules = make_rules()
         all_views = getattr(url_mod, 'all_views', None)
         if all_views:
-          self.views.update(all_views)
-      self.url_map.add(Submount(mountpoint, rules))
+          views.update(all_views)
+      url_map.add(Submount(mountpoint, rules))
     # TODO move the block bellow to somewhere else
     if 'kay.auth.middleware.AuthenticationMiddleware' in \
           self.app_settings.MIDDLEWARE_CLASSES:
@@ -196,6 +198,21 @@ class KayApp(object):
             'Failed to import %s: "%s".' %\
             (self.app_settings.AUTH_USER_BACKEND, e)
       self.auth_backend = klass()
+    self.views = views
+    self.url_map = url_map
+
+  def init_ereporter(self):
+    if self.use_ereporter:
+      import logging
+      from google.appengine.ext import ereporter
+
+      # Logging handlers are global so we need to make sure the logger
+      # isn't registered already.
+      logger = logging.getLogger()
+      for handler in logger.handlers:
+        if isinstance(handler, ereporter.ExceptionRecordingHandler):
+          return
+      ereporter.register_logger()
 
   def init_jinja2_environ(self):
     """
@@ -392,22 +409,30 @@ class KayApp(object):
   def handle_uncaught_exception(self, request, exc_info):
     import os
     if 'SERVER_SOFTWARE' in os.environ and \
-          os.environ['SERVER_SOFTWARE'].startswith('Dev'):
+          os.environ['SERVER_SOFTWARE'].startswith('Dev') and \
+          self.app_settings.DEBUG:
+      # It's intended to invoke werkzeug's debugger
       raise
     else:
-      subject = 'Error %s: %s' % (request.remote_addr, request.path)
       try:
         from kay.utils import repr
         request_repr = repr.dump(request)
       except Exception, e:
         request_repr = "Request repr() unavailable"
       message = "%s\n\n%s" % (self._get_traceback(exc_info), request_repr)
-      logging.error(message)
+
+      if self.use_ereporter:
+        logging.exception("An Unhandled Exception Occurred.")
+      else:
+        logging.error(message)
+
       if self.app_settings.DEBUG:
         error = InternalServerError(message.replace("\n", "<br/>\n"))
         return error.get_response(request.environ)
       else:
-        mail.mail_admins(subject, message, fail_silently=True)
+        if not self.use_ereporter:
+          subject = 'Error %s: %s' % (request.remote_addr, request.path)
+          mail.mail_admins(subject, message, fail_silently=True)
         # TODO: Return an HttpResponse that displays a friendly error message.
         return InternalServerError().get_response(request.environ)
 

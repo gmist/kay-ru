@@ -36,7 +36,13 @@ class DatastoreBackend(object):
   
   def get_user(self, request):
     if request.session.has_key('_user'):
-      return db.get(request.session['_user'])
+      session_user = request.session['_user']
+      if isinstance(session_user, db.Key):
+        # keep compatibility with the old way of storing user keys:
+        return db.get(session_user)
+      else:
+        auth_model_class = import_string(settings.AUTH_USER_MODEL)
+        return auth_model_class.get_by_user_name(session_user)
     else:
       return AnonymousUser()
 
@@ -49,7 +55,7 @@ class DatastoreBackend(object):
   def store_user(self, user):
     from kay.sessions import renew_session
     renew_session(local.request)
-    local.request.session['_user'] = user.key()
+    local.request.session['_user'] = user.user_name
     return True
 
   def login(self, request, user_name, password):

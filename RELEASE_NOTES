@@ -5,6 +5,31 @@ Copyright 2009 by Accense Technology, Inc
 
 Kay framework - Release Notes
 
+Kay-1.1.0 - March 7th 2011
+=====================================
+
+- Improved exception and error handling.
+  - Added a new kay.ext.ereporter application for managing error reporting.
+
+- Added a new kay.ext.live_settings application for managing global settings
+  without having to reploy.
+
+- Added a new AppStatsMiddleware which can be used to enable appstats.
+
+- Added a new Pagination API
+
+- Added the COOKIE_SECURE setting to support secure session cookies (Issue #90)
+
+- Added a new timezone_functions context processor.
+
+- Added a new cron_only view decorator for securing cron views.
+
+- Lazy load jinja2 so that requests that don't require jinja2 can return faster.
+
+- Updated google SDK taskqueue imports to import from the new package name.
+
+- Fixed an issue where the django module could not be loaded.
+
 Kay-1.0.0 - July 7th 2010 
 =============================
 

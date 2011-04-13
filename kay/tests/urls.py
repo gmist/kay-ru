@@ -21,5 +21,6 @@ view_groups = [
     Rule('/oldpage', endpoint='oldpage', redirect_to='newpage',
          view='kay.tests.views.oldpage'),
     Rule('/newpage', endpoint='newpage', view='kay.tests.views.newpage'),
+    Rule('/cron', endpoint='cron', view='kay.tests.views.cron'),
   )
 ]

@@ -1,38 +1,35 @@
 
 ======================
-Using media compressor
+メディア圧縮機能を使う
 ======================
 
 .. note::
 
-   This feature is still under Beta status. Implementations may change
-   in the future.
+   この機能はまだ実験段階です。将来仕様が変わる可能性があります。
 
-Overview
+概要
 ========
 
-If your application has lots of javascript and css files, it will take
-some costs for loading all of these files. You can use ``media
-compressor`` in this case for reducing page-loading costs.
+もし、あなたのアプリケーションで多くのjavascriptおよびcssファイルを使っているなら、
+それらのファイルの読み込みにそれなりのコストがかかるでしょう。
+ウェブページの読み込みの際のコストを減らしたいのであれば、 ``media compressor`` を使うとよいでしょう。
 
-By default, Kay uses bundled jsmin module for compressing javascripts,
-and uses concatinating algorithms(literally, just concatinating all
-the css files) for css files.
+Kayのデフォルトでは, バンドルしているjsminのモジュールをjavascriptの圧縮に使います。
+cssについては、結合アルゴリズム(文字通り、すべてのcssを順番に結合するだけ）を使います。
 
-You can change what tool to use for compressing javascript files and
-css files independently.
+javascriptおよびcssの圧縮に使うツールは、それぞれ個別に変更することが可能です。
 
-Compressed files are stored in ``_generated_media`` directory by
-default. You need to add this directory to your static file
-configuration in app.yaml.
+圧縮されたファイルはデフォルトでは、 ``_generated_media`` ディレクトリに保存されます。 
+このディレクトリを、app.yamlの設定に、静的ファイルを扱うディレクトリとして登録する必要があります。
 
-Media compressor quick start
-============================
 
-To use media compressor, you need to add a context_processor to
-``CONTEXT_PROCESSORS`` variable, and add two configuratoin variables.
+メディア圧縮　クイックスタート
+=====================================
 
-Let's say you have following media directory:
+メディア圧縮機能を使うには,  ``CONTEXT_PROCESSORS`` の変数に、context_processorを追加する必要があります。
+設定する変数は2種類あります。
+
+開発中のアプリケーションが以下のようなmediaディレクトリ構造を持っているとしましょう:
 
 .. code-block:: bash
 
@@ -53,9 +50,10 @@ Let's say you have following media directory:
        |-- subpage.js
        `-- toppage.js
 
-Let's say in your toppage, you're using jquery stuff, base.js, toppage.js, and all the css files except for subpages.css. In your subpage, you're using base.js, subpage.js, and all the css files except for toppage.css.
+トップページではbase.jsとtoppage.js、そしてsubpages.cssを除くすべてのcssファイルを使っているとします。
+また、個別ページではbase.jsとsubpage.js、toppage.cssを除くすべてのcssファイルを使っているとします。
 
-Here are simple configurations for this situation:
+以下がその場合の単純な設定方法です:
 
 settings.py:
 
@@ -127,8 +125,8 @@ yourapp/templates/index.html:
    </body>
    </html>
 
-In development server, compression is disabled by default, so these
-compiled_*** tag will expanded just like following:
+開発サーバーでは、圧縮はデフォルトでは無効になっています。
+そのため、ここにあるcompiled_*** という部分は、以下のように展開されます。:
 
 .. code-block:: html
 
@@ -144,8 +142,8 @@ compiled_*** tag will expanded just like following:
    <script type="text/javascript" src="media/js/toppage.js"></script> 
 
 
-To compile these files, you need to invoke ``compile_media``
-subcommand with ``manage.py`` script.
+これらのファイルをコンパイルして圧縮するには、``manage.py``に``compile_media``の
+サブコマンドを指定して実行します。
 
 .. code-block:: bash
 
@@ -179,17 +177,17 @@ subcommand with ``manage.py`` script.
 
    3 directories, 4 files
 
-To enable serving these files from this directory, you may need to add
-the directory to app.yaml file (according to the version of Kay you're
-using, you don't need to this) as follows:
+これらのファイルを使えるようにするにはapp.yamlの設定に
+このディレクトリを追加する必要があります。
+(Kayのバージョンによっては、最初から設定されている場合があります）以下のように設定します。:
 
 .. code-block:: yaml
 
    - url: /_generated_media
      static_dir: _generated_media
 
-Now, you can deploy your application to the appspot with compressed
-media. In this case, actual rendered html top page looks like follows:
+これで、圧縮されたファイルをデプロイする準備ができました。
+この例に挙げたケースでは、実際にアクセスして際に提供されるHTMLは以下のようになります。:
 
 .. code-block:: html
 
@@ -208,49 +206,47 @@ media. In this case, actual rendered html top page looks like follows:
    </body> 
    </html>
 
-References
-==========
+リファレンス
+================
 
-Available tool options for javascript files are:
+javascriptの圧縮の際に使用可能なオプション:
 
 * ``concat``
 
-  Just concatinating all the javascripts
+  単純にjavascriptsをつなげて結合します。
 
 * ``jsminify``
 
-  Use bundled jsmin module for compressing javascripts
+  javascriptsの圧縮の際にバンドルしているjsminモジュールを使います。
 
 * ``goog_calcdeps``
 
-  Use calcdeps.py in google's closure library for
-  compressing/calclating dependencies.
+  グーグルのclosure libraryにあるcalcdeps.pyを圧縮および依存関係の計算に使います。
 
 * ``goog_compiler``
 
-  Use closure compiler for compressing js files.
+  jsファイルの圧縮にclosure compilerを使います。
 
 
-Available tool options for css files are:
+cssの圧縮の際に使用可能なオプション:
 
 * ``separate``
 
-  Just copying all the css files
+  すべてのcssファイルをコピーします。
 
 * ``concat``
 
-  Just concatinating all the css files
+  単純にすべてのcssファイルをつないで結合します。
 
 * ``csstidy``
 
-  Use csstidy for compressing css files. You need to install csstidy
-  by yourself.
+  圧縮の際にcsstidyを使います。あらかじめ、自分の環境にcsstidyをインストールしておく必要があります。
 
 
 TODO
 ====
 
-* Image handling
-* More detailed references
+* 画像への対応
+* より詳細なリファレンス
 
 

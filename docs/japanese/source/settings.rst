@@ -61,6 +61,11 @@ Kayアプリケーションの基本的な設定はプロジェクトディレ�
    Cookieの名前を設定します。デフォルト値は ``KAY_SESSION`` です。
 
    
+.. attribute:: COOKIE_SECURE
+
+   Cookieにsecure属性を付与するかどうかを設定します。有効にすると、CookieはHTTPSなどのセキュアな通信時にのみ送信されます。有効にする場合は ``True``, 無効にする場合は ``False`` を設定します。デフォルト値は ``False`` です。
+
+
 .. attribute:: SESSION_MEMCACHE_AGE
 
    セッション情報の有効期限を設定します。デフォルト値は ``3600`` (1時間) です。

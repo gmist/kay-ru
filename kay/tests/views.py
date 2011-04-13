@@ -15,7 +15,7 @@ from kay.utils import (
   local, render_to_response, url_for,
 )
 from kay.i18n import lazy_gettext as _
-from kay.utils.decorators import maintenance_check
+from kay.utils.decorators import maintenance_check, cron_only
 
 @maintenance_check
 def index(request):
@@ -38,3 +38,7 @@ def countup(request):
   count = request.session.get('count', 0) + 1
   request.session['count'] = count
   return Response(str(count))
+
+@cron_only
+def cron(request):
+    return Response("OK")
