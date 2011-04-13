@@ -59,7 +59,7 @@ def create_db_manage_script(main_func=None, clean_func=None, description=None):
     else:
       auth_func = auth
 
-    remote_api_stub.ConfigureRemoteApi(appid, path, auth_func,
+    remote_api_stub.ConfigureRemoteApi(None, path, auth_func,
                                        host, secure=secure, save_cookies=True)
     remote_api_stub.MaybeInvokeAuthentication()
 

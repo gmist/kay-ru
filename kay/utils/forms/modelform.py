@@ -117,6 +117,23 @@ def monkey_patch(name, bases, namespace):
 class Property(db.Property):
   __metaclass__ = monkey_patch
 
+  def get_model_property_name(self):
+    """Return the attribute name of this property in this property's Model class"""
+
+    matching_prop_names = [prop_name for (prop_name, prop) in
+            self.model_class.properties().items() if prop.name == self.name]
+    if len(matching_prop_names) != 1:
+      raise Exception('Model class "%s" must have exactly one property with'
+                      ' the datastore storage name "%s". Found %d properties'
+                      ' with that name: %s' % (
+          self.model_class.__name__,
+          self.name,
+          len(matching_prop_names),
+          matching_prop_names
+        )
+      )
+    return matching_prop_names[0]
+
   def get_form_field(self, form_class=forms.TextField, **kwargs):
     """Return a Django form field appropriate for this property.
 
@@ -136,7 +153,9 @@ class Property(db.Property):
     """
     defaults = {'required': self.required}
     if self.verbose_name is None:
-      defaults['label'] = self.name.capitalize().replace('_', ' ')
+      defaults['label'] = (
+        self.get_model_property_name().capitalize().replace('_', ' ')
+      )
     else:
       defaults['label'] = self.verbose_name
     if self.choices:
@@ -167,7 +186,7 @@ class Property(db.Property):
 
     By default this returns the instance attribute's value unchanged.
     """
-    return getattr(instance, self.name)
+    return getattr(instance, self.get_model_property_name())
 
   def make_value_from_form(self, value):
     """Convert a form value to a property value.
@@ -687,7 +706,14 @@ class BaseModelForm(forms.Form):
         value = cleaned_data.get(name)
         if not value and prop.default is not None:
           value = prop.default
-        converted_data[name] = prop.make_value_from_form(value)
+
+        # For new entities, use the datastore property names as the keys
+        # instead of the model property names
+        if instance is not None:
+            data_name = name
+        else:
+            data_name = getattr(opts.model, name).name
+        converted_data[data_name] = prop.make_value_from_form(value)
     try:
       converted_data.update(kwargs)
       if instance is None:

@@ -157,11 +157,17 @@ class HTTPException(Exception):
     def status_code(self):
         # This property is added for more robust consistency between
         # BaseResponse and HTTPException.
-        import logging
-        logging.warn("Deprecation warning. The status_code property on "
-                     "werkzeug HTTPException objects is not part of the "
-                     "standard werkzeug distribution and may be removed in a "
-                     "future version of kay.")
+
+        # DEPRECATED 1.1
+        # This code is deprecated and will be removed in
+        # versions >= 1.5 or 2.0
+        from kay.conf import settings
+        if settings.DEBUG:
+            import logging
+            logging.debug("Deprecation warning. The status_code property on "
+                         "werkzeug HTTPException objects is not part of the "
+                         "standard werkzeug distribution and may be removed in a "
+                         "future version of kay.")
         return self.code
 
 class _ProxyException(HTTPException):

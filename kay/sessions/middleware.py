@@ -35,5 +35,6 @@ class SessionMiddleware(object):
       session_store.save(request.session)
       response.set_cookie(settings.COOKIE_NAME,
                           session_store.get_data(request.session),
-                          max_age=settings.COOKIE_AGE)
+                          max_age=settings.COOKIE_AGE,
+                          secure=settings.COOKIE_SECURE)
     return response

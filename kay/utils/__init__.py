@@ -33,11 +33,37 @@ _timezone_cache = {}
 def get_response_cls():
   return import_string(settings.RESPONSE_CLASS)
 
-def set_trace():
-  import pdb, sys
-  debugger = pdb.Pdb(stdin=sys.__stdin__, 
-                     stdout=sys.__stdout__)
-  debugger.set_trace(sys._getframe().f_back)
+def set_trace(force=False):
+  """
+  Set a debug trace.
+
+  If force is true then this method resets all
+  standard io streams before running Pdb. This
+  makes pdb run well but will make it so your
+  request will not return data (HTML etc.)
+  to the client properly.
+
+  If force is false then we use a slightly broken
+  pdb but one that will allow the request to return
+  normally and output data properly to the client.
+  """
+  if is_dev_server():
+    import pdb, sys
+    if force:
+        # Add readline to the allowed modules so
+        # pdb will work properly.
+        from google.appengine.tools.dev_appserver import HardenedModulesHook
+        HardenedModulesHook._WHITE_LIST_C_MODULES.append("readline")
+
+        for attr in ('stdin', 'stdout', 'stderr'):
+          setattr(sys, attr, getattr(sys, '__%s__' % attr))
+        debugger = pdb.Pdb()
+    else:
+        debugger = pdb.Pdb(
+            stdin=sys.__stdin__,
+            stdout=sys.__stdout__,
+        )
+    debugger.set_trace(sys._getframe().f_back)
 
 def get_kay_locale_path():
   import kay
@@ -80,6 +106,12 @@ def get_timezone(tzname):
     _timezone_cache['tzname'] = tz
   return tz
 
+def is_dev_server():
+  return ('SERVER_SOFTWARE' in os.environ and
+      os.environ['SERVER_SOFTWARE'].startswith('Dev'))
+
+def is_appengine():
+  return not is_dev_server()
 
 def raise_on_dev():
   if 'SERVER_SOFTWARE' in os.environ and \

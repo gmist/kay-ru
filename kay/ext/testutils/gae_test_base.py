@@ -93,7 +93,8 @@ def get_dev_apiproxy():
     _apiproxy.RegisterStub('urlfetch', urlfetch_stub.URLFetchServiceStub())
     _apiproxy.RegisterStub('mail', mail_stub.MailServiceStub()) 
     _apiproxy.RegisterStub('memcache', memcache_stub.MemcacheServiceStub()) 
-    _apiproxy.RegisterStub('taskqueue', taskqueue_stub.TaskQueueServiceStub()) 
+    _apiproxy.RegisterStub('taskqueue', taskqueue_stub.TaskQueueServiceStub(
+        root_path=kay.PROJECT_DIR)) 
     try:
       _apiproxy.RegisterStub('images', images_stub.ImagesServiceStub())
     except NameError:

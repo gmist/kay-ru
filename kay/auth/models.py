@@ -54,7 +54,8 @@ class User(db.Model):
 class DatastoreUserDBOperationMixin(object):
 
   @classmethod
-  def create_inactive_user(cls, user_name, password, email, send_email=True):
+  def create_inactive_user(cls, user_name, password, email, send_email=True,
+                           do_registration=True):
     import datetime
     from kay.registration.models import RegistrationProfile
     from google.appengine.api import taskqueue
@@ -65,25 +66,30 @@ class DatastoreUserDBOperationMixin(object):
         from kay.auth import DuplicateKeyError
         raise DuplicateKeyError(_(u"This user name is already taken."
                                   " Please choose another user name."))
-      salt = crypto.gen_salt()
-      activation_key = crypto.sha1(salt+user_name).hexdigest()
-      profile_key = db.Key.from_path(cls.kind(), key_name,
-                                     RegistrationProfile.kind(),
-                                     activation_key)
+      if do_registration:
+        salt = crypto.gen_salt()
+        activation_key = crypto.sha1(salt+user_name).hexdigest()
+        profile_key = db.Key.from_path(cls.kind(), key_name,
+                                       RegistrationProfile.kind(),
+                                       activation_key)
 
-      expiration_date = datetime.datetime.now() + \
-          datetime.timedelta(seconds=settings.ACCOUNT_ACTIVATION_DURATION)
-      taskqueue.add(url=url_for('_internal/expire_registration',
-                                registration_key=str(profile_key)),
-                    eta=expiration_date, transactional=True)
-      taskqueue.add(url=url_for('_internal/send_registration_confirm',
-                                registration_key=str(profile_key)),
-                    transactional=True)
-      user = cls(key_name=key_name, activated=False, user_name=user_name,
-                 password=crypto.gen_pwhash(password), email=email)
-      profile = RegistrationProfile(user=user, parent=user,
-                                    key_name=activation_key)
-      db.put([profile, user])
+        expiration_date = datetime.datetime.now() + \
+            datetime.timedelta(seconds=settings.ACCOUNT_ACTIVATION_DURATION)
+        taskqueue.add(url=url_for('_internal/expire_registration',
+                                  registration_key=str(profile_key)),
+                      eta=expiration_date, transactional=True)
+        taskqueue.add(url=url_for('_internal/send_registration_confirm',
+                                  registration_key=str(profile_key)),
+                      transactional=True)
+        user = cls(key_name=key_name, activated=False, user_name=user_name,
+                   password=crypto.gen_pwhash(password), email=email)
+        profile = RegistrationProfile(user=user, parent=user,
+                                      key_name=activation_key)
+        db.put([profile, user])
+      else:
+        user = cls(key_name=key_name, activated=False, user_name=user_name,
+                   password=crypto.gen_pwhash(password), email=email)
+        db.put(user)
       return user
     user = db.run_in_transaction(txn)
     return user
@@ -129,6 +135,10 @@ class GoogleUser(User):
   """
   Use User.user_id() as key_name for this model.
   """
+  @classmethod
+  def get_key_name(cls, key):
+    return "_%s" % key
+
   def __eq__(self, obj):
     if not obj or obj.is_anonymous():
       return False

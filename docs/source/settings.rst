@@ -75,7 +75,12 @@ Items
 
    The cookie's name. The default is ``KAY_SESSION``.
 
-   
+
+.. attribute:: COOKIE_SECURE
+
+   If set to ``True``, the cookie will only be sent over secure connections. The default is ``False``.
+
+
 .. attribute:: SESSION_MEMCACHE_AGE
 
    The session information's age. The default is ``3600`` seconds (1 hour).

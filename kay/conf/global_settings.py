@@ -21,6 +21,7 @@ SECRET_KEY = 'please set secret keys here'
 SESSION_PREFIX = 'gaesess:'
 COOKIE_AGE = 1209600 # 2 weeks
 COOKIE_NAME = 'KAY_SESSION'
+COOKIE_SECURE = False
 SESSION_MEMCACHE_AGE = 3600
 SESSION_STORE = 'kay.sessions.sessionstore.GAESessionStore'
 LANG_COOKIE_AGE = COOKIE_AGE
@@ -73,6 +74,8 @@ JINJA2_EXTENSIONS = (
 
 SUBMOUNT_APPS = (
 )
+
+JINJA2_PRECOMPILATION_EXCLUDES = r'^.*(\.swp|\.png|\.jpg|\.gif|\.pdf)$'
 
 MIDDLEWARE_CLASSES = (
 )

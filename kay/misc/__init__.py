@@ -24,6 +24,21 @@ def get_appid():
       appid = None
   return appid
 
+def get_versionid():
+  from google.appengine.api import apiproxy_stub_map
+  have_appserver = bool(apiproxy_stub_map.apiproxy.GetStub('datastore_v3'))
+  if have_appserver:
+    versionid = os.environ.get('CURRENT_VERSION_ID')
+  else:
+    try:
+      from google.appengine.tools import dev_appserver
+      from kay import PROJECT_DIR
+      appconfig, unused = dev_appserver.LoadAppConfig(PROJECT_DIR, {})
+      versionid = appconfig.version
+    except ImportError:
+      versionid = None
+  return versionid
+
 def get_datastore_paths():
   """Returns a tuple with the path to the datastore and history file.
 

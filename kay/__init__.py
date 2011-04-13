@@ -16,7 +16,8 @@ import logging
 
 import settings
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
+__version_info__ = (1, 1, 0, 'final', 0)
 
 KAY_DIR = os.path.abspath(os.path.dirname(__file__))
 LIB_DIR = os.path.join(KAY_DIR, 'lib')
@@ -99,6 +100,10 @@ def setup_env(manage_py_env=False):
       lib = os.path.join(SDK_PATH, 'lib')
       # Automatically add all packages in the SDK's lib folder:
       for dir in os.listdir(lib):
+        # SDK 1.4.2 introduced Django 1.2, and renamed django to django_0_96
+        if dir == 'django_0_96':
+         EXTRA_PATHS.append(os.path.join(lib, dir))
+         continue
         path = os.path.join(lib, dir)
         # Package can be under 'lib/<pkg>/<pkg>/' or 'lib/<pkg>/lib/<pkg>/'
         detect = (os.path.join(path, dir), os.path.join(path, 'lib', dir))

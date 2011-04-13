@@ -291,8 +291,8 @@ def create_user(user_name=('u', ''), password=('P', ''), is_admin=('A', False),
     host = "%s.appspot.com" % appid
   if not path:
     path = '/remote_api'
-    
-  remote_api_stub.ConfigureRemoteApi(appid, path, auth_func,
+  
+  remote_api_stub.ConfigureRemoteApi(None, path, auth_func,
                                      host, secure=secure, save_cookies=True)
   remote_api_stub.MaybeInvokeAuthentication()
   try:
@@ -322,7 +322,7 @@ def clear_datastore(appid=('a', ''), host=('h', ''), path=('p', ''),
     for kind in kinds.split(','):
       models.append(db.class_for_kind(kind))
       
-  remote_api_stub.ConfigureRemoteApi(appid, path, auth_func,
+  remote_api_stub.ConfigureRemoteApi(None, path, auth_func,
                                      host, secure=secure, save_cookies=True)
   remote_api_stub.MaybeInvokeAuthentication()
   delete_all_entities(models)
@@ -352,7 +352,7 @@ def rshell(appid=('a', ''), host=('h', ''), path=('p', ''),
   if not path:
     path = '/remote_api'
 
-  remote_api_stub.ConfigureRemoteApi(appid, path, auth_func,
+  remote_api_stub.ConfigureRemoteApi(None, path, auth_func,
                                      host, secure=secure, save_cookies=True)
   remote_api_stub.MaybeInvokeAuthentication()
   if use_ipython:

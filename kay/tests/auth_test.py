@@ -52,16 +52,16 @@ class DatastoreBackendTestCase(GAETestBase):
   KIND_PREFIX_IN_TEST = 't2'
   
   def setUp(self):
-    from kay.auth import create_new_user
     s = LazySettings(settings_module='kay.tests.datastore_settings')
     app = get_application(settings=s)
     self.client = Client(app, BaseResponse)
-    create_new_user("foobar", "password", is_admin=False)
 
   def tearDown(self):
     self.client.test_logout()
 
   def test_login(self):
+    from kay.auth import create_new_user
+    create_new_user("foobar", "password", is_admin=False)
     response = self.client.get(url_for('auth_testapp/index'))
     self.assertEqual(response.status_code, 200)
     response = self.client.get(url_for('auth_testapp/secret'))
@@ -80,8 +80,11 @@ class DatastoreBackendTestCase(GAETestBase):
       from kay.auth.models import DatastoreUser
       from kay.utils import crypto
 
-      user = DatastoreUser.create_inactive_user("testuser", "password", "testuser@example.com") 
-      self.assertEqual(user.key().name(), DatastoreUser.get_key_name("testuser"))
+      user = DatastoreUser.create_inactive_user("testuser", "password",
+                                                "testuser@example.com",
+                                                do_registration=False) 
+      self.assertEqual(user.key().name(),
+                       DatastoreUser.get_key_name("testuser"))
       self.assertEqual(user.user_name, "testuser")
     
       self.assertTrue(crypto.check_pwhash(user.password, "password"))

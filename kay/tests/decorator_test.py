@@ -23,6 +23,7 @@ from werkzeug import BaseResponse, Client, Request
 import kay
 from kay.app import get_application
 from kay.conf import LazySettings
+from kay.ext.testutils.gae_test_base import GAETestBase
 from kay.tests import capability_stub as mocked_capability_stub
 
 class MaintenanceCheckTestCase(unittest.TestCase):
@@ -78,6 +79,46 @@ class MaintenanceCheckTestCase(unittest.TestCase):
                      'http://localhost/no_decorator')
     response = self.client.get('/no_decorator')
     self.assertEqual(response.status_code, 200)
+
+class CronOnlyTestCase(GAETestBase):
+
+  def setUp(self):
+    s = LazySettings(settings_module='kay.tests.settings')
+    app = get_application(settings=s)
+    self.client = Client(app, BaseResponse)
+
+  def test_cron_only(self):
+    response = self.client.get("/cron",
+            headers=(('X-AppEngine-Cron', 'true'),))
+    self.assertEqual(response.status_code, 200)
+    self.assertTrue(response.data == "OK")
+
+  def test_cron_only_failure(self):
+    response = self.client.get("/cron")
+    self.assertEqual(response.status_code, 403)
+
+
+class CronOnlyDebugTestCase(GAETestBase):
+
+  def setUp(self):
+    s = LazySettings(settings_module='kay.tests.settings')
+    s.DEBUG = True
+    app = get_application(settings=s)
+    self.client = Client(app, BaseResponse)
+
+  def test_cron_only_failure(self):
+    from kay.utils import is_dev_server
+    response = self.client.get("/cron")
+    if is_dev_server():
+      self.assertEqual(response.status_code, 200)
+    else:
+      self.assertEqual(response.status_code, 403)
+
+  def test_cron_only(self):
+    response = self.client.get("/cron",
+            headers=(('X-AppEngine-Cron', 'true'),))
+    self.assertEqual(response.status_code, 200)
+    self.assertTrue(response.data == "OK")
 
 if __name__ == "__main__":
   unittest.main()
