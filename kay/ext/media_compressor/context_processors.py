@@ -16,20 +16,19 @@ def get_compiled_js_urls(label):
   t = '<script type="text/javascript" src="%s"></script>\n'
 
   media_compiler.set_verbose_method(media_compiler.VERBOSE_LOGGING)
-  markup = ''
+  tags = []
   for url in media_compiler.get_js_urls(label, auto_compile=False):
-    markup += t.replace('%s', url)
-  return Markup(markup)
+    tags.append(t % url)
+  return Markup(''.join(tags))
 
 def get_compiled_css_urls(label):
   t = '<link type="text/css" rel="stylesheet" href="%s" />\n'
 
   media_compiler.set_verbose_method(media_compiler.VERBOSE_LOGGING)
-  markup = ''
+  tags = []
   for url in media_compiler.get_css_urls(label, auto_compile=False):
-    markup += t.replace('%s', url)
-  return Markup(markup)
-
+    tags.append(t % url)
+  return Markup(''.join(tags))
 
 def media_urls(request):
   return {'compiled_js': get_compiled_js_urls,

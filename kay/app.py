@@ -433,8 +433,10 @@ class KayApp(object):
         if not self.use_ereporter:
           subject = 'Error %s: %s' % (request.remote_addr, request.path)
           mail.mail_admins(subject, message, fail_silently=True)
-        # TODO: Return an HttpResponse that displays a friendly error message.
-        return InternalServerError().get_response(request.environ)
+        # To use render_error enables developers to customize how to
+        # render this error.
+        return render_error(InternalServerError(
+            "%s: %s" % (exc_info[0].__name__, exc_info[1])))
 
   def _get_traceback(self, exc_info):
     "Helper function to return the traceback as a string"

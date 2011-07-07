@@ -9,7 +9,6 @@ Kay decorator test.
 """
 
 import unittest
-import re
 
 from google.appengine.api import apiproxy_stub_map
 from google.appengine.api.capabilities import capability_stub
@@ -18,9 +17,9 @@ from google.appengine.api import urlfetch_stub
 from google.appengine.api.memcache import memcache_stub
 from google.appengine.api import user_service_stub
 
-from werkzeug import BaseResponse, Client, Request
+from werkzeug import BaseResponse
 
-import kay
+from kay.utils.test import Client
 from kay.app import get_application
 from kay.conf import LazySettings
 from kay.ext.testutils.gae_test_base import GAETestBase
@@ -106,6 +105,7 @@ class CronOnlyDebugTestCase(GAETestBase):
     app = get_application(settings=s)
     self.client = Client(app, BaseResponse)
 
+
   def test_cron_only_failure(self):
     from kay.utils import is_dev_server
     response = self.client.get("/cron")
@@ -117,6 +117,29 @@ class CronOnlyDebugTestCase(GAETestBase):
   def test_cron_only(self):
     response = self.client.get("/cron",
             headers=(('X-AppEngine-Cron', 'true'),))
+    self.assertEqual(response.status_code, 200)
+    self.assertTrue(response.data == "OK")
+
+class CronOnlyAdminTestCase(GAETestBase):
+
+  def setUp(self):
+    s = LazySettings(settings_module='kay.tests.decorator_settings')
+    s.DEBUG = True
+    app = get_application(settings=s)
+    self.client = Client(app, BaseResponse)
+
+  def test_cron_only_admin(self):
+    from kay.auth.models import DatastoreUser
+    user = DatastoreUser(
+        key_name=DatastoreUser.get_key_name("foobar"),
+        user_name="foobar",
+        password=DatastoreUser.hash_password("password")
+    )
+    user.is_admin = True
+    user.put()
+
+    self.client.test_login(username='foobar')
+    response = self.client.get('/cron')
     self.assertEqual(response.status_code, 200)
     self.assertTrue(response.data == "OK")
 
