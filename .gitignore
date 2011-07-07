@@ -3,6 +3,7 @@
 *.tmp
 *~
 *.pdf
+.idea
 .DS_Store
 docs/build
 docs/japanese/build
