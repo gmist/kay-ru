@@ -235,6 +235,9 @@ def parse_multipart(file, boundary, content_length, stream_factory=None,
                 container = []
                 _write = container.append
                 guard_memory = max_form_memory_size is not None
+                content_type = headers.get('content-type')
+                (content_type, options) = parse_options_header(content_type)
+                part_charset = options.get('charset', charset)
 
             # otherwise we parse the rest of the headers and ask the stream
             # factory for something we can write in.
@@ -312,7 +315,7 @@ def parse_multipart(file, boundary, content_length, stream_factory=None,
                                                 content_length, headers)))
             else:
                 form.append((name, _decode_unicode(''.join(container),
-                                                   charset, errors)))
+                                                   part_charset, errors)))
     finally:
         # make sure the whole input stream is read
         file.exhaust()

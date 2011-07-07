@@ -16,8 +16,8 @@ import logging
 
 import settings
 
-__version__ = "1.1.0"
-__version_info__ = (1, 1, 0, 'final', 0)
+__version__ = "2.0.0qa1"
+__version_info__ = (2, 0, 0, 'qa', 1)
 
 KAY_DIR = os.path.abspath(os.path.dirname(__file__))
 LIB_DIR = os.path.join(KAY_DIR, 'lib')
@@ -128,6 +128,12 @@ def setup():
   from kay.conf import settings
   from google.appengine.ext import db
   from google.appengine.ext.db import polymodel
+
+  if getattr(settings, 'ADD_APP_PREFIX_TO_KIND', True) and settings.DEBUG:
+    logging.info(
+      "ADD_APP_PREFIX_TO_KIND is deprecated. Please add a kind() method"
+      "to your models that returns the correct name for the entity"
+    )
 
   class _meta(object):
     __slots__ = ('object_name', 'app_label', 'module_name', '_db_table',

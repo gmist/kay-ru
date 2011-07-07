@@ -18,9 +18,9 @@ import copy
 import getpass
 from os import makedirs
 
-from google.appengine.tools import bulkloader
 
 import kay
+from google.appengine.tools import bulkloader
 from kay.misc import get_appid
 from kay.management.utils import print_status
 from shell import get_all_models_as_dict
@@ -116,6 +116,7 @@ def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
     base_args = ["bulkloader", "--restore"]
   else:
     base_args = ["bulkloader", "--dump"]
+  base_args.append("--application=%s" % app_id)
   if "localhost" in url:
     base_args.append("--app_id=%s" % app_id)
     bulkloader.RequestManager.AuthFunction = dummy_auth_func

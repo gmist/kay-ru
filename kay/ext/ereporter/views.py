@@ -115,18 +115,21 @@ class ReportGenerator(BaseHandler):
         # Send the error mail.
         subject = ('Daily exception report for app "%s", major version "%s"'
                    % (app_id, major_version))
-        mail_args = {
-            'subject': subject,
-            'body': report_text,
-            'html': report,
-        }
+        
         if to:
-          mail_args['to'] = to
-          mail_args['sender'] = sender
-          mail.send_mail(**mail_args)
+          mail.send_mail(
+            to = to,
+            sender = sender,
+            subject = subject,
+            body = report_text,
+            html = report,
+          )
         else:
           from kay.mail import mail_admins
-          mail_admins(**mail_args)
+          mail_admins(
+            subject = subject,
+            message = report_text,
+          )
 
       if isTrue(self.request.args.get('delete', 'true')):
         db.delete(exceptions)
