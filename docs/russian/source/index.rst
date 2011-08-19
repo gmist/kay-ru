@@ -2,13 +2,15 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Kay documentation!
-=============================
+.. _index:
 
-This document might be newer version than you need. Please visit following urls for older releases:
+Welcome to Kay 1.1.0 documentation!
+============================================
 
-  - http://kay-docs.shehas.net/0.8.0/
-  - http://kay-docs.shehas.net/0.3.0/
+This document reflects the newest version of Kay. Please visit following urls for older releases:
+
+  - http://kay-docs.shehas.net/1.0.1/
+  - http://kay-docs.shehas.net/1.0.0/
 
 Contents:
 
@@ -25,6 +27,8 @@ Contents:
   views
   templates
   utils
+  pagination
+  decorators
   auth
   session
   forms-usage
