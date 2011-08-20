@@ -4,15 +4,15 @@
 
 .. _index:
 
-Welcome to Kay 1.1.0 documentation!
-============================================
+Добро пожаловоть в документацию Kay версии 1.1.0!
+=================================================
 
-This document reflects the newest version of Kay. Please visit following urls for older releases:
+Этот документ описывает последнюю версию Kay. Информацию о более старых версиях вы можете найти по следующим url:
 
   - http://kay-docs.shehas.net/1.0.1/
   - http://kay-docs.shehas.net/1.0.0/
 
-Contents:
+Содержание:
 
 .. toctree::
   :numbered:
@@ -44,8 +44,8 @@ Contents:
   generic_views
   extensions
 
-Indices and tables
-==================
+Индексы и указатели
+===================
 
 * :ref:`genindex`
 * :ref:`modindex`

@@ -75,10 +75,10 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
    $ python kay/manage.py startproject myproject
    $ tree myproject
    myproject
-   !-- app.yaml
-   !-- kay -> /Users/tmatsuo/work/tmp/kay/kay
-   !-- manage.py -> /Users/tmatsuo/work/tmp/kay/manage.py
-   !-- settings.py
+   |-- app.yaml
+   |-- kay -> /Users/tmatsuo/work/tmp/kay/kay
+   |-- manage.py -> /Users/tmatsuo/work/tmp/kay/manage.py
+   |-- settings.py
    `-- urls.py
 
    1 directory, 4 files
@@ -103,11 +103,11 @@ http://code.google.com/p/kay-framework/downloads/list и затем распак
    $ python manage.py startapp myapp
    $ tree myapp
    myapp
-   !-- __init__.py
-   !-- models.py
-   !-- templates
-   !   `-- index.html
-   !-- urls.py
+   |-- __init__.py
+   |-- models.py
+   |-- templates
+   |   `-- index.html
+   |-- urls.py
    `-- views.py
 
    1 directory, 5 files
