@@ -20,6 +20,8 @@ from os import makedirs
 
 
 import kay
+import google.appengine
+import yaml
 from google.appengine.tools import bulkloader
 from kay.misc import get_appid
 from kay.management.utils import print_status
@@ -87,7 +89,22 @@ def real_auth_func(self,
   return (email, password)
   
 
-def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
+def is_new_gae():
+    VERSION_FILE = '../../VERSION'
+    version_filename = os.path.join(os.path.dirname(google.appengine.__file__),
+                                    VERSION_FILE)
+    if not os.path.isfile(version_filename):
+        logging.error('Could not find version file at %s', version_filename)
+    else:
+        version_fh = open(version_filename, 'r')
+        try:
+            version = yaml.safe_load(version_fh)
+        finally:
+            version_fh.close()
+            return version.get('timestamp', 0) >= 1308730906 #GAE version >= 1.5.2
+    return False
+
+def dump_or_restore_all(help, data_set_name, app_id, url, directory, batch_size, op):
   if help:
     print_status('help for %s' % op)
     sys.exit(0)
@@ -118,7 +135,10 @@ def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
     base_args = ["bulkloader", "--dump"]
   base_args.append("--application=%s" % app_id)
   if "localhost" in url:
-    base_args.append("--app_id=%s" % app_id)
+    if is_new_gae():
+      base_args.append("--application=dev~%s" % app_id)
+    else:
+      base_args.append("--application=%s" % app_id)
     bulkloader.RequestManager.AuthFunction = dummy_auth_func
   else:
     bulkloader.RequestManager.AuthFunction = real_auth_func
@@ -135,7 +155,8 @@ def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
     args.append("--kind=%s" % kind)
     args.append("--db_filename=%s" % db_filename)
     args.append("--log_file=%s" % log_file)
-    args.append("--batch_size=%s" % 20) 
+    if batch_size:
+        args.append("--batch_size=%s" % int(batch_size))
     if op == DUMP:
       args.append("--result_db_filename=%s" % result_db_filename)
     args.append("--url=%s" % url)
@@ -159,9 +180,9 @@ def dump_or_restore_all(help, data_set_name, app_id, url, directory, op):
 
 
 def dump_all(help=False, data_set_name=('n', ''), app_id=('i', ''),
-             url=('u', ''), directory=('d', '')):
-  dump_or_restore_all(help, data_set_name, app_id, url, directory, DUMP)
+             url=('u', ''), directory=('d', ''), batch_size=('s','')):
+    dump_or_restore_all(help, data_set_name, app_id, url, directory, batch_size, DUMP)
 
 def restore_all(help=False, data_set_name=('n', ''), app_id=('i', ''),
-                url=('u', ''), directory=('d', '')):
-  dump_or_restore_all(help, data_set_name, app_id, url, directory, RESTORE)
+                url=('u', ''), directory=('d', ''), batch_size=('s', '')):
+    dump_or_restore_all(help, data_set_name, app_id, url, directory, batch_size, RESTORE)
