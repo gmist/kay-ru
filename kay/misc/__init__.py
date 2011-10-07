@@ -7,7 +7,7 @@ Kay miscellanea.
 :license: BSD, see LICENSE for more details.
 """
 
-import os, sys
+import os
 
 def get_appid():
   from google.appengine.api import apiproxy_stub_map
