@@ -46,6 +46,8 @@ def runserver_passthru_argv():
   p = get_datastore_paths()
   if not args_have_option(args, "--datastore_path"):
     args.extend(["--datastore_path", p[0]])
+  if not args_have_option(args, "--default_partition"):
+      args.extend(['--default_partition', ''])
   if not args_have_option(args, "--history_path"):
     args.extend(["--history_path", p[1]])
   # Append the current working directory to the arguments.
