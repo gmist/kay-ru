@@ -9,13 +9,13 @@ Kay miscellanea.
 
 import os
 from google.appengine.api import apiproxy_stub_map
-from google.appengine.tools.dev_appserver import GetVersionObject
 
 
 def get_appconfig():
     try:
       from google.appengine.tools import dev_appserver
       from kay import PROJECT_DIR
+      from google.appengine.tools.dev_appserver import GetVersionObject
       version = GetVersionObject()
       if version and version.get('timestamp', 0 ) >= 1318895182:
         # if GAE 1.6 or high
