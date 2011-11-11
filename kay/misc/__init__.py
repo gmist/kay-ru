@@ -8,36 +8,35 @@ Kay miscellanea.
 """
 
 import os
+from google.appengine.api import apiproxy_stub_map
+from google.appengine.tools.dev_appserver import GetVersionObject
+
+
+def get_appconfig():
+    try:
+      from google.appengine.tools import dev_appserver
+      from kay import PROJECT_DIR
+      version = GetVersionObject()
+      if version and version.get('timestamp', 0 ) >= 1318895182:
+        # if GAE 1.6 or high
+        appconfig, unused, cache = dev_appserver.LoadAppConfig(PROJECT_DIR, {})
+      else:
+        appconfig, unused = dev_appserver.LoadAppConfig(PROJECT_DIR, {})
+    except ImportError:
+        appconfig = None
+    return appconfig
 
 def get_appid():
-  from google.appengine.api import apiproxy_stub_map
   have_appserver = bool(apiproxy_stub_map.apiproxy.GetStub('datastore_v3'))
   if have_appserver:
-    appid = os.environ.get('APPLICATION_ID')
-  else:
-    try:
-      from google.appengine.tools import dev_appserver
-      from kay import PROJECT_DIR
-      appconfig, unused = dev_appserver.LoadAppConfig(PROJECT_DIR, {})
-      appid = appconfig.application
-    except ImportError:
-      appid = None
-  return appid
+    return os.environ.get('APPLICATION_ID')
+  return get_appconfig().application
 
 def get_versionid():
-  from google.appengine.api import apiproxy_stub_map
   have_appserver = bool(apiproxy_stub_map.apiproxy.GetStub('datastore_v3'))
   if have_appserver:
-    versionid = os.environ.get('CURRENT_VERSION_ID')
-  else:
-    try:
-      from google.appengine.tools import dev_appserver
-      from kay import PROJECT_DIR
-      appconfig, unused = dev_appserver.LoadAppConfig(PROJECT_DIR, {})
-      versionid = appconfig.version
-    except ImportError:
-      versionid = None
-  return versionid
+    return os.environ.get('CURRENT_VERSION_ID')
+  return get_appconfig().version
 
 def get_datastore_paths():
   """Returns a tuple with the path to the datastore and history file.
