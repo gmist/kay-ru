@@ -857,6 +857,7 @@ class FormWidget(MappingWidget):
   def default_actions(self, **attrs):
     """Returns a default action div with a submit button."""
     label = attrs.pop('label', None)
+    input_class = attrs.pop('input_class', '')
     if label is None:
       if self._field.form._use_confirmation:
         if self._field.form._confirmed == "1":
@@ -866,7 +867,8 @@ class FormWidget(MappingWidget):
       else:
         label = _('Submit')
     attrs.setdefault('class', 'actions')
-    return html.div(html.input(type='submit', value=label), **attrs)
+    return html.div(
+            html.input(type='submit', value=label, class_=input_class), **attrs)
 
   def render(self, action='', method='post', **attrs):
     if action:
