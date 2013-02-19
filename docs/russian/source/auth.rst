@@ -7,7 +7,7 @@
 
 Google App Engine имеет прекрасный стандартный механизм аутенфикации,
 который использует google или google apps-аккуаунты. Вы можете использовать
-его возможность в расширенном режиме с помощью ``AuthenticationMiddleware`` и
+его возможности в расширенном режиме с помощью ``AuthenticationMiddleware`` и
 ``kay.auth.backends.googleaccount.GoogleBackend``. Также вы можете использовать
 пару имя_пользователя/пароль хранимые в app engine datastore.
 Google App Engine has a very nice default auth mechanism using google
