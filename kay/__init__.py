@@ -3,7 +3,7 @@
 """
 Kay framework.
 
-:Copyright: (c) 2009 Accense Technology, Inc. 
+:Copyright: (c) 2009 Accense Technology, Inc.
                      Takashi Matsuo <tmatsuo@candit.jp>,
                      Ian Lewis <IanMLewis@gmail.com>
                      All rights reserved.
@@ -104,6 +104,11 @@ def setup_env(manage_py_env=False):
         if dir == 'django_0_96':
          EXTRA_PATHS.append(os.path.join(lib, dir))
          continue
+        # In SDK 1.6.4 added webob 1.1.1 and renamed webob to webob_0_9
+        # In SDK 1.7.5 renamed webob_1_1_1 to webob-1.1.1
+        if dir == 'webob_1_1_1' or dir == 'webob-1.1.1':
+          EXTRA_PATHS.append(os.path.join(lib, dir))
+          continue
         path = os.path.join(lib, dir)
         # Package can be under 'lib/<pkg>/<pkg>/' or 'lib/<pkg>/lib/<pkg>/'
         detect = (os.path.join(path, dir), os.path.join(path, 'lib', dir))
@@ -161,7 +166,7 @@ def setup():
     db_table = property(_get_db_table, _set_db_table)
 
   def _initialize_model(cls):
-    cls._meta = _meta(cls)  
+    cls._meta = _meta(cls)
 
   old_propertied_class_init = db.PropertiedClass.__init__
   def __init__(cls, name, bases, attrs, map_kind=True):
